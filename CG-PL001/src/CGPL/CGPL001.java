@@ -1,5 +1,7 @@
 package CGPL;
 
+import Logic.PersistenceManager;
+import Logic.Simulator;
 import com.sun.opengl.util.Animator;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
@@ -21,6 +23,13 @@ import javax.media.opengl.glu.GLU;
 public class CGPL001 implements GLEventListener {
 
     public static void main(String[] args) {
+        
+        Simulator simulator = PersistenceManager.loadSimulator("highway_data", true);
+        System.out.print(simulator.toString());
+        
+        
+        
+        /*
         Frame frame = new Frame("Simple JOGL Application");
         GLCanvas canvas = new GLCanvas();
 
@@ -47,7 +56,7 @@ public class CGPL001 implements GLEventListener {
         // Center frame
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        animator.start();
+        animator.start();*/
     }
 
     public void init(GLAutoDrawable drawable) {
