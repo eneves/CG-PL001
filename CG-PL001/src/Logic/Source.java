@@ -12,6 +12,23 @@ package Logic;
 public class Source {
 
     private int period;
+    private int position;
+    private int currentTick;
     private Section destination;
     private Section origin;
+
+    public Source(int position,int period, Section origin) {
+        this.period = period;
+        this.origin = origin;
+        this.position = position;
+        currentTick = 0;
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder(" -> source at ");
+        sb.append(position).append(" and period of ").append(period).append("\n");
+        sb.append("   next car drop in ").append(period-currentTick);
+        return sb.toString();        
+    }
 }
