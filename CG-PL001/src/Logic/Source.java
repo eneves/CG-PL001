@@ -36,6 +36,17 @@ public class Source {
         return origin;
     }
     
+    public void incrementTick(){
+        currentTick++;
+    }
+    public void resetTick(){
+        currentTick = 0;
+    }
+    
+    public boolean putCar(){
+        return currentTick==period;
+    }
+        
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder(" -> source at ");

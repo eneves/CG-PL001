@@ -18,6 +18,26 @@ public class Section {
     public Section(boolean isAuxiliar){
         this.isAuxiliar = isAuxiliar;
     }    
+
+    public boolean isIsAuxiliar() {
+        return isAuxiliar;
+    }
+
+    public Car getRightSide() {
+        return rightSide;
+    }
+
+    public void setRightSide(Car rightSide) {
+        this.rightSide = rightSide;
+    }
+
+    public Car getLeftSide() {
+        return leftSide;
+    }
+
+    public void setLeftSide(Car leftSide) {
+        this.leftSide = leftSide;
+    }
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();

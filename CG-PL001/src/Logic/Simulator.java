@@ -71,4 +71,10 @@ public class Simulator {
         return false;
     }
 
+    public void incrementInstant() {
+        road = trafficManager.processTraffic(road);
+        trafficManager.processSources(sources);
+        currentInstant++;
+    }
+
 }
