@@ -26,7 +26,7 @@ public class CGPL001 implements GLEventListener {
         Simulator simulator = PersistenceManager.loadSimulator("highway_data", true);
         
         System.out.print(simulator.toString());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             simulator.incrementInstant();
             System.out.print(simulator.toString());
         }

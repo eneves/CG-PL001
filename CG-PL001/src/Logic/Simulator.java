@@ -56,15 +56,15 @@ public class Simulator {
         sb.append("Current road status (t=").append(currentInstant).append(") :\n");
         int index = 0;
         for (Section s : road) {
-            sb.append(s.toString()).append(" ").append(haveSource(s)?"I":"O");
+            sb.append(s.toString()).append(" ").append(haveSource(index) ? "I" : "O");
             sb.append(" -> (").append(index++).append(")\n");
         }
         return sb.toString();
     }
 
-    private boolean haveSource(Section s) {
+    private boolean haveSource(int index) {
         for (Source source : sources) {
-            if (s.equals(source.getOrigin())) {
+            if (source.getPosition() == index) {
                 return true;
             }
         }
@@ -73,7 +73,7 @@ public class Simulator {
 
     public void incrementInstant() {
         road = trafficManager.processTraffic(road);
-        trafficManager.processSources(sources);
+        trafficManager.processSources(sources, road);
         currentInstant++;
     }
 

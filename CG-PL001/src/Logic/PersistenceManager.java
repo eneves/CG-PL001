@@ -41,7 +41,7 @@ public class PersistenceManager {
         sources.add(source);
         source = new Source(4, 4, road[4]);
         sources.add(source);
-        source = new Source(4, 5, road[5]);
+        source = new Source(5, 5, road[5]);
         sources.add(source);
 
         Simulator simulator = new Simulator(isEditorMode);

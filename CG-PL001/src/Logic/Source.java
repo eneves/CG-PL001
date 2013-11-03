@@ -14,12 +14,12 @@ public class Source {
     private int period;
     private int position;
     private int currentTick;
-    private Section destination;
-    private Section origin;
+    //private Section destination;
+    //private Section origin;
 
     public Source(int position,int period, Section origin) {
         this.period = period;
-        this.origin = origin;
+        //this.origin = origin;
         this.position = position;
         currentTick = 0;
     }
@@ -32,10 +32,10 @@ public class Source {
         return position;
     }
 
-    public Section getOrigin() {
+    /*public Section getOrigin() {
         return origin;
     }
-    
+    */
     public void incrementTick(){
         currentTick++;
     }
