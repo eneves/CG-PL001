@@ -59,6 +59,7 @@ public class CGPL001 implements GLEventListener {
          frame.setLocationRelativeTo(null);
          frame.setVisible(true);
          animator.start();*/
+
     }
 
     public void init(GLAutoDrawable drawable) {
