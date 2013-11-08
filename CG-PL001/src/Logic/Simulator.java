@@ -6,6 +6,7 @@
 package Logic;
 
 import java.util.ArrayList;
+import javax.media.opengl.GL2;
 
 /**
  *
@@ -75,6 +76,14 @@ public class Simulator {
         road = trafficManager.processTraffic(road);
         trafficManager.processSources(sources, road);
         currentInstant++;
+    }
+    
+    
+    public void render(GL2 gl){
+        Car car = new Car();
+        //car.setOriginZ(10);
+        //car.setOriginX(-2.5f);
+        car.render(gl);
     }
 
 }
