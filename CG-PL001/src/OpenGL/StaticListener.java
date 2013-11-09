@@ -24,20 +24,20 @@ public class StaticListener
      * Use a perspective or a parallel projection.
      */
     protected boolean perspectiveProjection = true;
-    protected float left = -3;
-    protected float right = 3;
-    protected float top = 3;
-    protected float bottom = -3;
-    protected float far = 4;
+    protected float left = -4;
+    protected float right = 14;
+    protected float top = 12;
+    protected float bottom = -1f;
+    protected float far = 50;
     protected float near = 1;
     /**
      * Camera coordinates.
      */
-    protected float[] eye = new float[]{0, 0, 3};
+    protected float[] eye = new float[]{0, 0, -3};
     /**
      * Coordinates of where the camera is pointing.
      */
-    protected float[] center = new float[]{0, 0, 1};
+    protected float[] center = new float[]{0, 0, -0.5f};
     /**
      * Up vector used when setting the camera properties.
      */

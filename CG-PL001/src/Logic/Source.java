@@ -5,6 +5,9 @@
  */
 package Logic;
 
+import javax.media.opengl.GL2;
+import static javax.media.opengl.GL2GL3.GL_QUADS;
+
 /**
  *
  * @author Emanuel
@@ -14,10 +17,37 @@ public class Source {
     private int period;
     private int position;
     private int currentTick;
+    private float originX;
+    private float originY;
+    private float originZ;
     //private Section destination;
     //private Section origin;
 
-    public Source(int position,int period, Section origin) {
+    public float getOriginX() {
+        return originX;
+    }
+
+    public void setOriginX(float originX) {
+        this.originX = originX;
+    }
+
+    public float getOriginY() {
+        return originY;
+    }
+
+    public void setOriginY(float originY) {
+        this.originY = originY;
+    }
+
+    public float getOriginZ() {
+        return originZ;
+    }
+
+    public void setOriginZ(float originZ) {
+        this.originZ = originZ;
+    }
+
+    public Source(int position, int period, Section origin) {
         this.period = period;
         //this.origin = origin;
         this.position = position;
@@ -33,25 +63,77 @@ public class Source {
     }
 
     /*public Section getOrigin() {
-        return origin;
-    }
-    */
-    public void incrementTick(){
+     return origin;
+     }
+     */
+    public void incrementTick() {
         currentTick++;
     }
-    public void resetTick(){
+
+    public void resetTick() {
         currentTick = 0;
     }
-    
-    public boolean putCar(){
-        return currentTick==period;
+
+    public boolean putCar() {
+        return currentTick == period;
     }
-        
+
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder sb = new StringBuilder(" -> source at ");
         sb.append(position).append(" and period of ").append(period).append("\n");
-        sb.append("   next car drop in ").append(period-currentTick);
-        return sb.toString();        
+        sb.append("   next car drop in ").append(period - currentTick);
+        return sb.toString();
+    }
+
+    public void render(GL2 gl) {
+        gl.glTranslatef(originX, originY, originZ); // translate to relative axe
+        //gl.glRotatef(90, 0, 1, 1);
+        gl.glBegin(GL_QUADS); // of the color cube
+        
+        // Front-face
+        gl.glColor3f(0.5f, 0.5f, 0.5f); // grey
+        gl.glVertex3f(-10.0f, 0.0f, 0.0f);
+        gl.glVertex3f(-10.0f, 6.0f, 0.0f);
+        gl.glVertex3f(0.0f, 6.0f, 0.0f);
+        gl.glVertex3f(0.0f, 0.0f, 0.0f);
+        
+        // Back-face
+        //gl.glColor3f(1.0f, 0.0f, 1.0f); // purple
+        gl.glVertex3f(-10.0f, 0.0f, 10.0f);
+        gl.glVertex3f(-10.0f, 6.0f, 10.0f);
+        gl.glVertex3f(0.0f, 6.0f, 10.0f);
+        gl.glVertex3f(0.0f, 0.0f, 10.0f);
+        
+        // Left-face
+        //gl.glColor3f(1.0f, 0.0f, 0.0f); // red
+        gl.glVertex3f(0.0f, 0.0f, 0.0f);
+        gl.glVertex3f(0.0f, 6.0f, 0.0f);
+        gl.glVertex3f(0.0f, 6.0f, 10.0f);
+        gl.glVertex3f(0.0f, 0.0f, 10.0f);
+
+        // Right-face
+        //gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
+        gl.glVertex3f(-10.0f, 0.0f, 0.0f);
+        gl.glVertex3f(-10.0f, 6.0f, 0.0f);
+        gl.glVertex3f(-10.0f, 6.0f, 10.0f);
+        gl.glVertex3f(-10.0f, 0.0f, 10.0f);
+
+        // Top-face
+        //gl.glColor3f(1.0f, 1.0f, 0.0f); // yellow
+        gl.glVertex3f(0.0f, 6.0f, 0.0f);
+        gl.glVertex3f(0.0f, 6.0f, 10.0f);
+        gl.glVertex3f(-10.0f, 6.0f, 0.0f);
+        gl.glVertex3f(-10.0f, 6.0f, 10.0f);
+
+        // Bottom-face
+        //gl.glColor3f(0.0f, 1.0f, 1.0f); // cyan        
+        gl.glVertex3f(0.0f, 0.0f, 0.0f);
+        gl.glVertex3f(0.0f, 0.0f, 10.0f);
+        gl.glVertex3f(-10.0f, 0.0f, 0.0f);
+        gl.glVertex3f(-10.0f, 0.0f, 10.0f);
+
+        gl.glEnd();
+        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe
     }
 }
