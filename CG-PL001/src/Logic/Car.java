@@ -5,6 +5,7 @@
  */
 package Logic;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
 
@@ -44,55 +45,57 @@ public class Car {
     }
 
     public void render(GL2 gl) {
-        gl.glLoadIdentity();                        // reset the model-view matrix
+        //gl.glLoadIdentity();                        // reset the model-view matrix
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
-        gl.glRotatef(90, 0, 1, 1);
+        //gl.glRotatef(90, 0, 1, 1);
 
-        gl.glColor3f(0.0f, 1.0f, 0.0f); // green
         gl.glBegin(GL_QUADS); // of the color cube
 
+        gl.glColor3f(0.0f, 1.0f, 0.0f); // green
         // Back-face
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
         gl.glVertex3f(0.0f, 1.5f, 0.0f);
         gl.glVertex3f(2.0f, 1.5f, 0.0f);
         gl.glVertex3f(2.0f, 0.0f, 0.0f);
-        
+
         gl.glColor3f(1.0f, 0.0f, 0.0f); // red
         // Left-face
         gl.glVertex3f(2.0f, 0.0f, 0.0f);
         gl.glVertex3f(2.0f, 1.5f, 0.0f);
         gl.glVertex3f(2.0f, 1.5f, -5.0f);
         gl.glVertex3f(2.0f, 0.0f, -5.0f);
-        
+
         gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
         // Right-face
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
         gl.glVertex3f(0.0f, 1.5f, 0.0f);
         gl.glVertex3f(0.0f, 1.5f, -5.0f);
         gl.glVertex3f(0.0f, 0.0f, -5.0f);
-        
+
         gl.glColor3f(1.0f, 1.0f, 0.0f); // yellow
         // Top-face
         gl.glVertex3f(0.0f, 1.5f, 0.0f);
         gl.glVertex3f(0.0f, 1.5f, -5.0f);
         gl.glVertex3f(2.0f, 1.5f, -5.0f);
         gl.glVertex3f(2.0f, 1.5f, 0.0f);
-        
+
         gl.glColor3f(0.0f, 1.0f, 1.0f); // cyan
         // Bottom-face
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
         gl.glVertex3f(0.0f, 0.0f, -5.0f);
         gl.glVertex3f(2.0f, 0.0f, -5.0f);
         gl.glVertex3f(2.0f, 0.0f, 0.0f);
-        
+
         gl.glColor3f(1.0f, 0.0f, 1.0f); // purple
         // Front-face
         gl.glVertex3f(0.0f, 0.0f, -5.0f);
         gl.glVertex3f(0.0f, 1.5f, -5.0f);
         gl.glVertex3f(2.0f, 1.5f, -5.0f);
         gl.glVertex3f(2.0f, 0.0f, -5.0f);
-        
+
         gl.glEnd();
+
+        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe
     }
 
 }

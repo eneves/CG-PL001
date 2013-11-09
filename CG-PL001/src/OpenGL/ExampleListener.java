@@ -20,7 +20,24 @@ public class ExampleListener
     public void keyTyped(KeyEvent ke) {
         switch (ke.getKeyChar()) {
             case 'a':
-                this.left -= 0.1f;
+                this.eye[0] -= 0.1f;
+                break;
+            case 's':
+                this.eye[2] += 0.1f;
+                this.center[2] += 0.1f;
+                break;
+            case 'd':
+                this.eye[0] += 0.1f;
+                break;
+            case 'w':
+                this.eye[2] -= 0.1f;
+                this.center[2] -= 0.1f;
+                break;
+            case 'z':
+                this.eye[1] -= 0.1f;
+                break;
+            case 'x':
+                this.eye[1] += 0.1f;
                 break;
             case ' ':
                 this.perspectiveProjection = !this.perspectiveProjection;

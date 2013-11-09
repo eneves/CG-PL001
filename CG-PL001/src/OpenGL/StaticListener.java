@@ -24,20 +24,20 @@ public class StaticListener
      * Use a perspective or a parallel projection.
      */
     protected boolean perspectiveProjection = true;
-    protected float left = -10;
-    protected float right = 10;
-    protected float top = 10;
-    protected float bottom = -10;
-    protected float far = -10;
-    protected float near = 0;
+    protected float left = -3;
+    protected float right = 3;
+    protected float top = 3;
+    protected float bottom = -3;
+    protected float far = 4;
+    protected float near = 1;
     /**
      * Camera coordinates.
      */
-    protected float[] eye = new float[]{3, 0, 0};
+    protected float[] eye = new float[]{0, 0, 3};
     /**
      * Coordinates of where the camera is pointing.
      */
-    protected float[] center = new float[]{0, 0, 0};
+    protected float[] center = new float[]{0, 0, 1};
     /**
      * Up vector used when setting the camera properties.
      */
@@ -46,10 +46,10 @@ public class StaticListener
      * The OpenGL AWT component that this listener is attached to.
      */
     protected final GLCanvas canvas;
-    
+
     protected final Simulator simulator;
 
-    StaticListener(GLCanvas canvas,Simulator simulator) {
+    StaticListener(GLCanvas canvas, Simulator simulator) {
         this.canvas = canvas;
         this.simulator = simulator;
         this.status();
@@ -77,9 +77,8 @@ public class StaticListener
                 this.center[0], this.center[1], this.center[2],
                 this.up[0], this.up[1], this.up[2]
         );
-        
+
         simulator.render(gl);
-        
     }
 
     @Override
@@ -95,11 +94,11 @@ public class StaticListener
                     near, far
             );
         } else {
-            gl.glOrtho(
-                    left, right,
-                    bottom, top,
-                    near, far
-            );
+             gl.glOrtho(
+             left, right,
+             bottom, top,
+             near, far
+             );
         }
         gl.glMatrixMode(GL2.GL_MODELVIEW);
     }
