@@ -49,17 +49,17 @@ public class PersistenceManager {
         Source source = new Source(1, 2, road[1]);
         source.setOriginX(road[1].getOriginX()-3.5f);
         source.setOriginY(road[1].getOriginY());
-        source.setOriginX(road[1].getOriginZ()-5);
+        source.setOriginZ(road[1].getOriginZ()-5);
         sources.add(source);
         source = new Source(4, 4, road[4]);
         source.setOriginX(road[4].getOriginX()-3.5f);
         source.setOriginY(road[4].getOriginY());
-        source.setOriginX(road[4].getOriginZ()-5);
+        source.setOriginZ(road[4].getOriginZ()-5);
         sources.add(source);
         source = new Source(5, 5, road[5]);
         source.setOriginX(road[5].getOriginX()-3.5f);
         source.setOriginY(road[5].getOriginY());
-        source.setOriginX(road[5].getOriginZ()-5);
+        source.setOriginZ(road[5].getOriginZ()-5);
         sources.add(source);
 
         Simulator simulator = new Simulator(isEditorMode);
