@@ -32,16 +32,34 @@ public class PersistenceManager {
     //Tabela 1: Características da rede de estradas quando é omitido o nome do ficheiro.
     private static Simulator loadDefaults(boolean isEditorMode) {
         Section[] road = new Section[12];
+        float x=0;
+        float y=0;
+        float z=0;
         for (int i = 0; i < 12; i++) {
             Section section = new Section(i==0||i==11);
+            if(i!=0 && i!=11){
+                section.setOriginX(x);
+                section.setOriginY(y);
+                section.setOriginZ(z);
+                z -=10;
+            }
             road[i] = section;
         }
         ArrayList<Source> sources = new ArrayList();
         Source source = new Source(1, 2, road[1]);
+        source.setOriginX(road[1].getOriginX()-3.5f);
+        source.setOriginY(road[1].getOriginY());
+        source.setOriginX(road[1].getOriginZ()-5);
         sources.add(source);
         source = new Source(4, 4, road[4]);
+        source.setOriginX(road[4].getOriginX()-3.5f);
+        source.setOriginY(road[4].getOriginY());
+        source.setOriginX(road[4].getOriginZ()-5);
         sources.add(source);
         source = new Source(5, 5, road[5]);
+        source.setOriginX(road[5].getOriginX()-3.5f);
+        source.setOriginY(road[5].getOriginY());
+        source.setOriginX(road[5].getOriginZ()-5);
         sources.add(source);
 
         Simulator simulator = new Simulator(isEditorMode);
