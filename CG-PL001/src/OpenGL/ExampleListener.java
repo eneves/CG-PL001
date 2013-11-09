@@ -23,15 +23,15 @@ public class ExampleListener
                 this.eye[0] -= 0.1f;
                 break;
             case 's':
-                this.eye[2] += 0.1f;
-                this.center[2] += 0.1f;
+                this.eye[1] += 0.1f;
+                this.center[1] += 0.1f;
                 break;
             case 'd':
                 this.eye[0] += 0.1f;
                 break;
             case 'w':
-                this.eye[2] -= 0.1f;
-                this.center[2] -= 0.1f;
+                this.eye[1] -= 0.1f;
+                this.center[1] -= 0.1f;
                 break;
             case 'z':
                 this.eye[1] -= 0.1f;
