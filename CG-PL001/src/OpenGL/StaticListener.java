@@ -88,11 +88,14 @@ public class StaticListener
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
         if (this.perspectiveProjection) {
-            gl.glFrustum(
+            /*gl.glFrustum(
                     left, right,
                     bottom, top,
                     near, far
-            );
+            );*/
+            
+            GLU glu = GLU.createGLU(gl);
+            glu.gluPerspective(60, width/height, 1, 60);
         } else {
              gl.glOrtho(
              left, right,
