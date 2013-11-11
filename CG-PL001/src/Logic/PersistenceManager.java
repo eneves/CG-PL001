@@ -5,6 +5,8 @@
  */
 package Logic;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 /**
@@ -17,7 +19,12 @@ public class PersistenceManager {
 
     public static Simulator loadSimulator(String filename, boolean isEditorMode) {
         try {
-
+            BufferedReader in = new BufferedReader(new FileReader(filename)); {
+            
+            }
+            
+            
+            
         } catch (Exception e) {
             return loadDefaults(isEditorMode);
         }
