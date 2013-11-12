@@ -6,6 +6,7 @@
 package Logic;
 
 import java.util.ArrayList;
+import javax.media.opengl.GL2;
 
 /**
  *
@@ -54,10 +55,11 @@ public class Simulator {
             sb.append(s.toString()).append("\n");
         }
         sb.append("Current road status (t=").append(currentInstant).append(") :\n");
-        int index = 0;
-        for (Section s : road) {
-            sb.append(s.toString()).append(" ").append(haveSource(index) ? "I" : "O");
-            sb.append(" -> (").append(index++).append(")\n");
+        //int index = 0;
+        for (int i = road.length - 1; i >= 0; i--) {
+            Section s = road[i];
+            sb.append(s.toString()).append(" ").append(haveSource(i) ? "I" : "O");
+            sb.append(" -> (").append(i).append(")\n");
         }
         return sb.toString();
     }
@@ -75,6 +77,16 @@ public class Simulator {
         road = trafficManager.processTraffic(road);
         trafficManager.processSources(sources, road);
         currentInstant++;
+    }
+
+    public void render(GL2 gl) {
+        for (Section section : road) {
+            if (!section.isIsAuxiliar())
+                section.render(gl);
+        }
+        for (Source source : sources) {
+            source.render(gl);
+        }
     }
 
 }
