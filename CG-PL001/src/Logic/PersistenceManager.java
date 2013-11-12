@@ -19,13 +19,18 @@ public class PersistenceManager {
 
     public static Simulator loadSimulator(String filename, boolean isEditorMode) {
         try {
-            BufferedReader in = new BufferedReader(new FileReader(filename)); {
+            BufferedReader in = new BufferedReader(new FileReader(filename));
             
-            }
-            
-            
-            
-        } catch (Exception e) {
+                int number = Integer.parseInt(in.readLine());
+                Section[] road = new Section[number + 2];
+                for (int i = 0; i < road.length; i++) {
+                    Section section = new Section(i == 0 || i == 11);
+                    road[i] = section;
+                }
+
+
+
+            }  catch (Exception e) {
             return loadDefaults(isEditorMode);
         }
         return loadDefaults(isEditorMode);
@@ -40,7 +45,7 @@ public class PersistenceManager {
     private static Simulator loadDefaults(boolean isEditorMode) {
         Section[] road = new Section[12];
         for (int i = 0; i < 12; i++) {
-            Section section = new Section(i==0||i==11);
+            Section section = new Section(i == 0 || i == 11);
             road[i] = section;
         }
         ArrayList<Source> sources = new ArrayList();
@@ -59,7 +64,5 @@ public class PersistenceManager {
     }
 
     public static void saveSimulator() {
-
     }
-
 }
