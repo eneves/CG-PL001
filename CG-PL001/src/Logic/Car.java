@@ -19,6 +19,7 @@ public class Car {
     private float originX;
     private float originY;
     private float originZ;
+    private float[] color;
 
     public float getOriginX() {
         return originX;
@@ -44,13 +45,17 @@ public class Car {
         this.originZ = originZ;
     }
 
+    public void setColor(float[] color) {
+        this.color = color;
+    }
+
     public void render(GL2 gl) {
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
         //gl.glRotatef(90, 0, 1, 1);
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Front-face
-        gl.glColor3f(0.0f, 1.0f, 0.0f); // green
+        gl.glColor3f(color[0],color[1], color[2]); // green
 
         gl.glVertex3f(1.0f, 0.0f, 0.0f);
         gl.glVertex3f(1.0f, 1.5f, 0.0f);

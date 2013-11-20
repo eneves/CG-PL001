@@ -4,10 +4,18 @@ import Logic.Simulator;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.media.opengl.GL;
+import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
+import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
+import static javax.media.opengl.GL.GL_DEPTH_TEST;
+import static javax.media.opengl.GL.GL_LEQUAL;
+import static javax.media.opengl.GL.GL_NEVER;
+import static javax.media.opengl.GL.GL_NICEST;
 import javax.media.opengl.GL2;
+import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
 import javax.media.opengl.glu.GLU;
 
 /**
@@ -28,16 +36,16 @@ public class StaticListener
     protected float right = 14;
     protected float top = 12;
     protected float bottom = -1f;
-    protected float far = 50;
+    protected float far = 100;
     protected float near = 1;
     /**
      * Camera coordinates.
      */
-    protected float[] eye = new float[]{0, 0, -3};
+    protected float[] eye = new float[]{0, 12, -14};
     /**
      * Coordinates of where the camera is pointing.
      */
-    protected float[] center = new float[]{0, 0, -0.5f};
+    protected float[] center = new float[]{0, 11.5f, -12};
     /**
      * Up vector used when setting the camera properties.
      */
@@ -57,6 +65,14 @@ public class StaticListener
 
     @Override
     public void init(GLAutoDrawable glad) {
+        GL2 gl = glad.getGL().getGL2();      // get the OpenGL graphics context
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // set background (clear) color
+        gl.glClearDepth(1.0f);      // set clear depth value to farthest
+        gl.glEnable(GL_DEPTH_TEST); // enables depth testing
+        gl.glDepthFunc(GL_LEQUAL);  // the type of depth test to do
+        gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // best perspective correction
+        gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting
+
         System.out.println("GLEventListener.init(GLAutoDrawable)");
     }
 
@@ -68,7 +84,7 @@ public class StaticListener
     @Override
     public void display(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
-        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+        gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
         gl.glLoadIdentity();
 
         GLU glu = GLU.createGLU(gl);
@@ -88,22 +104,17 @@ public class StaticListener
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
         if (this.perspectiveProjection) {
-            /*gl.glFrustum(
+            GLU glu = GLU.createGLU(gl);
+            glu.gluPerspective(60, width / height, near, far);
+        } else {
+            gl.glOrtho(
                     left, right,
                     bottom, top,
                     near, far
-            );*/
-            
-            GLU glu = GLU.createGLU(gl);
-            glu.gluPerspective(60, width/height, 1, 60);
-        } else {
-             gl.glOrtho(
-             left, right,
-             bottom, top,
-             near, far
-             );
+            );
         }
         gl.glMatrixMode(GL2.GL_MODELVIEW);
+        gl.glLoadIdentity();
     }
 
     @Override

@@ -5,6 +5,7 @@
  */
 package Logic;
 
+import java.util.Random;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
 
@@ -20,8 +21,14 @@ public class Source {
     private float originX;
     private float originY;
     private float originZ;
+    private float[] color;
+    private static Random rd = new Random();
     //private Section destination;
     //private Section origin;
+
+    public float[] getColor() {
+        return color;
+    }
 
     public float getOriginX() {
         return originX;
@@ -47,11 +54,17 @@ public class Source {
         this.originZ = originZ;
     }
 
+
     public Source(int position, int period, Section origin) {
         this.period = period;
         //this.origin = origin;
         this.position = position;
         currentTick = 0;
+        
+        this.color = new float[3];
+        this.color[0] = rd.nextFloat();
+        this.color[1] = rd.nextFloat();
+        this.color[2] = rd.nextFloat();
     }
 
     public int getPeriod() {
@@ -92,7 +105,7 @@ public class Source {
         gl.glBegin(GL_QUADS); // of the color cube
         
         // Front-face
-        gl.glColor3f(0.5f, 0.5f, 0.5f); // grey
+        gl.glColor3f(color[0],color[1], color[2]); // grey
         gl.glVertex3f(-10.0f, 0.0f, 0.0f);
         gl.glVertex3f(-10.0f, 6.0f, 0.0f);
         gl.glVertex3f(0.0f, 6.0f, 0.0f);

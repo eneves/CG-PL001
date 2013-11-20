@@ -33,8 +33,8 @@ public class CGPL001 {
         while (true) {
             simulator.incrementInstant();
             canvas.display();
-            TimeUnit.MILLISECONDS.sleep(250);
-            System.out.print(simulator.toString());
+            TimeUnit.MILLISECONDS.sleep(150);
+            //System.out.print(simulator.toString());
         }
 
     }
@@ -44,7 +44,7 @@ public class CGPL001 {
         GLCapabilities caps = new GLCapabilities(glp);
         canvas = new GLCanvas(caps);
 
-        Frame frame = new Frame("Controlo da câmara e dos parâmetros da projecção");
+        Frame frame = new Frame("Auto-Estrada");
         frame.setSize(640, 480);
         frame.add(canvas);
         frame.setVisible(true);

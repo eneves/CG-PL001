@@ -86,7 +86,7 @@ public class TrafficManager {
                     car.setOriginY(0);
                     car.setOriginZ(section.getOriginZ()+2.5f);                                                          
                     section.setRightSide(car);
-                    
+                    car.setColor(source.getColor());                    
                 }
                 source.resetTick();
             }
