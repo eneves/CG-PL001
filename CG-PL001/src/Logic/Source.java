@@ -146,7 +146,7 @@ public class Source {
         gl.glVertex3f(-10.0f, 0.0f, 0.0f);
         gl.glVertex3f(-10.0f, 0.0f, 10.0f);
 
-        gl.glEnd();
+        gl.glEnd();                
         gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe
     }
 }
