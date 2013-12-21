@@ -50,7 +50,6 @@ public class Car {
 
     public void render(GL2 gl) {
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
-        //gl.glRotatef(90, 0, 1, 1);
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Front-face
@@ -97,7 +96,7 @@ public class Car {
         gl.glVertex3f(1.0f, 0.0f, 0.0f);
 
         gl.glEnd();
-        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe
+        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe 
     }
 
 }

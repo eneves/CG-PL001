@@ -75,6 +75,8 @@ public class Source {
         return position;
     }
 
+    
+
     /*public Section getOrigin() {
      return origin;
      }
@@ -101,7 +103,6 @@ public class Source {
 
     public void render(GL2 gl) {
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
-        //gl.glRotatef(90, 0, 1, 1);
         gl.glBegin(GL_QUADS); // of the color cube
         
         // Front-face
@@ -147,6 +148,6 @@ public class Source {
         gl.glVertex3f(-10.0f, 0.0f, 10.0f);
 
         gl.glEnd();                
-        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe
+        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe   
     }
 }

@@ -21,13 +21,22 @@ public class Section {
     private float originY;
     private float originZ;
     private float[] color;
-    private int angle;
+    private float angle;
+    private Source source;
 
-    public int getAngle() {
+    public Source getSource() {
+        return source;
+    }
+
+    public void setSource(Source source) {
+        this.source = source;
+    }
+
+    public float getAngle() {
         return angle;
     }
 
-    public void setAngle(int angle) {
+    public void setAngle(float angle) {
         this.angle = angle;
     }
    
@@ -98,7 +107,7 @@ public class Section {
 
     public void render(GL2 gl) {
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
-        //gl.glRotatef(90, 0, 1, 1);
+        gl.glRotatef(angle, 0, 1, 0);
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Front-face
@@ -144,7 +153,7 @@ public class Section {
         gl.glVertex3f(-3.5f, -0.3f, 0.0f);
 
         gl.glEnd();
-        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe
+        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe 
 
         if (rightSide != null) {
             rightSide.render(gl);

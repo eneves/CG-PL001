@@ -32,7 +32,7 @@ public class AppListener
             case 'l':
                 System.out.println("l pressionada!");
                 break;
-            case 'p':
+            case ' ':
                 this.simulator.setIsEditorMode(false);
                 break;
         }
@@ -81,9 +81,6 @@ public class AppListener
                 this.center[2] += 0.1f;
                 break;
             case ' ':
-                this.perspectiveProjection = !this.perspectiveProjection;
-                break;
-            case 'p':
                 this.simulator.setIsEditorMode(true);
                 break;
         }
