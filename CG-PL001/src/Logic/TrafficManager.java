@@ -80,7 +80,7 @@ public class TrafficManager {
     public void processSources(ArrayList<Source> sources, Section[] road) {
         for (Section section : road) {
             Source currSource = section.getSource();
-            if (currSource != null) {
+            if (currSource != null && currSource.isOn()) {
                 currSource.incrementTick();
                 if (currSource.putCar()) {
                     if (section.getRightSide() == null) {

@@ -2,8 +2,12 @@ package OpenGL;
 
 import Logic.PersistenceManager;
 import Logic.Simulator;
+import Logic.Source;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.opengl.awt.GLCanvas;
 
 /**
@@ -71,17 +75,48 @@ public class AppListener
     }
 
     private void keyTypedInSimulation(char chars) {
+
+        float viewAngle = getViewAngle();
         switch (chars) {
             case 'a':
-                this.eye[0] -= 0.1f;
-                break;
-            case 'r':
-                this.eye[1] += 0.1f;
-                this.center[1] += 0.1f;
+                this.eye[0] += 0.1f * Math.sin(viewAngle);
+                this.center[0] += 0.1f * Math.sin(viewAngle);
+                this.eye[2] -= 0.1f * Math.cos(viewAngle);
+                this.center[2] -= 0.1f * Math.cos(viewAngle);
                 break;
             case 'd':
-                this.eye[0] += 0.1f;
+                this.eye[0] -= 0.1f * Math.sin(viewAngle);
+                this.center[0] -= 0.1f * Math.sin(viewAngle);
+                this.eye[2] += 0.1f * Math.cos(viewAngle);
+                this.center[2] += 0.1f * Math.cos(viewAngle);
                 break;
+            case 's':
+                this.eye[0] -= 0.1f * Math.cos(viewAngle);
+                this.center[0] -= 0.1f * Math.cos(viewAngle);
+                this.eye[2] -= 0.1f * Math.sin(viewAngle);
+                this.center[2] -= 0.1f * Math.sin(viewAngle);
+                break;
+            case 'w':
+                this.eye[0] += 0.1f * Math.cos(viewAngle);
+                this.center[0] += 0.1f * Math.cos(viewAngle);
+                this.eye[2] += 0.1f * Math.sin(viewAngle);
+                this.center[2] += 0.1f * Math.sin(viewAngle);
+                break;
+            case ' ':
+                this.simulator.setIsEditorMode(true);
+                break;
+            case 'p':
+                toogleAnimation();
+                break;
+            case 'o':
+                if (this.simulator.hadSelection()) {
+                    Source source = this.simulator.getSelectedSection().getSource();
+                    if (source != null) {
+                        source.setOn(!source.isOn());
+                    }
+                }
+                break;
+            // TODO: Check this keys
             case 'f':
                 this.eye[1] -= 0.1f;
                 this.center[1] -= 0.1f;
@@ -104,23 +139,31 @@ public class AppListener
                 this.center[0] = (float) (h * Math.sin(angle - 0.17));
                 this.center[2] = (float) (h * Math.cos(angle - 0.17));
                 break;
-            case 's':
-                this.eye[2] -= 0.1f;
-                this.center[2] -= 0.1f;
-                break;
-            case 'w':
-                this.eye[2] += 0.1f;
-                this.center[2] += 0.1f;
-                break;
-            case ' ':
-                this.simulator.setIsEditorMode(true);
+            case 'r':
+                this.eye[1] += 0.1f;
+                this.center[1] += 0.1f;
                 break;
         }
     }
 
     @Override
     public void keyPressed(KeyEvent ke) {
+        /*if (simulator.isIsEditorMode()) {
 
+         } else {*/
+        switch (ke.getKeyCode()) {
+            case KeyEvent.VK_LEFT:
+                simulator.selectLeft();
+                break;
+            case KeyEvent.VK_RIGHT:
+                simulator.selectRight();
+                break;
+            case KeyEvent.VK_DOWN:
+                simulator.removeSelection();
+                break;
+        }
+        //}
+        this.canvas.display();
     }
 
     @Override
@@ -128,5 +171,32 @@ public class AppListener
         System.out.println("mouse clicked!");
         //System.out.println(me.getX()); //To change body of generated methods, choose Tools | Templates.
         //System.out.println(me.getXOnScreen()); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void toogleAnimation() {
+        if (simulator.isAnimationRunning()) {
+            simulator.toogleAnimation();
+        } else {
+            simulator.toogleAnimation();
+            AnimationThread animation = new AnimationThread();
+            new Thread(animation).start();
+        }
+    }
+
+    class AnimationThread implements Runnable {
+
+        @Override
+        public void run() {
+            while (simulator.isAnimationRunning()) {
+                try {
+                    simulator.incrementInstant();
+                    canvas.display();
+                    TimeUnit.MILLISECONDS.sleep(150);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Simulator.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            System.out.println("Thread finished!");
+        }
     }
 }

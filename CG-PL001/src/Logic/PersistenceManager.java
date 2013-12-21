@@ -58,9 +58,17 @@ public class PersistenceManager {
         float x = 0;
         float y = 0;
         float z = 0;
+        float angle = 0;
         for (int i = 0; i < road.size(); i++) {
             Section section = new Section(i == 0 || i == road.size() - 1, i == 0);
             if (!section.isAuxiliar()) {
+                if (angle < 90) {
+                    angle += 20;
+                    section.setAngle(20);
+                } else {
+                    angle -= 20;
+                    section.setAngle(-20);
+                }
                 section.setOriginX(x);
                 section.setOriginY(y);
                 section.setOriginZ(z);
@@ -76,6 +84,7 @@ public class PersistenceManager {
         source.setOriginX(section.getOriginX() - 3.5f);
         source.setOriginY(section.getOriginY());
         source.setOriginZ(section.getOriginZ());
+        source.setOn(true);
         return source;
     }
 
