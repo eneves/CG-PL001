@@ -1,8 +1,10 @@
 package OpenGL;
 
 import Logic.Simulator;
+import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
@@ -24,7 +26,8 @@ import javax.media.opengl.glu.GLU;
 public class StaticListener
         implements
         GLEventListener,
-        KeyListener {
+        KeyListener,
+        MouseListener{
 
     /**
      * Use a perspective or a parallel projection.
@@ -159,6 +162,26 @@ public class StaticListener
         System.out.format("   Eye:  ( %5.1f , %5.1f , %5.1f )\n", this.eye[0], this.eye[1], this.eye[2]);
         System.out.format("Center:  ( %5.1f , %5.1f , %5.1f )\n", this.center[0], this.center[1], this.center[2]);
         System.out.format("    Up:  ( %5.1f , %5.1f , %5.1f )\n", this.up[0], this.up[1], this.up[2]);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent me) {      
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
     }
 
 }

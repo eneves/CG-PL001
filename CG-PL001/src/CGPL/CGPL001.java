@@ -5,6 +5,7 @@ import Logic.Simulator;
 import OpenGL.AppListener;
 import OpenGL.StaticListener;
 import java.awt.Frame;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.TimeUnit;
@@ -63,6 +64,7 @@ public class CGPL001 {
 //		listener = new LineCameraListener (canvas, new float[] {3, -1, -1}, new float[] {3,1,1});
 //		listener = new RotatingLineCameraListener (canvas, new float[] {3, -1, -1}, new float[] {3,1,1});
         canvas.addGLEventListener(listener);
-        canvas.addKeyListener(listener);        
+        canvas.addKeyListener(listener); 
+        canvas.addMouseListener( listener);
     }
 }
