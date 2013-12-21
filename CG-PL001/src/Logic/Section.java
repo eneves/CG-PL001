@@ -21,7 +21,16 @@ public class Section {
     private float originY;
     private float originZ;
     private float[] color;
+    private int angle;
 
+    public int getAngle() {
+        return angle;
+    }
+
+    public void setAngle(int angle) {
+        this.angle = angle;
+    }
+   
     public float getOriginX() {
         return originX;
     }
