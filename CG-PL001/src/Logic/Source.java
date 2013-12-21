@@ -107,15 +107,15 @@ public class Source {
         
         // Front-face
         gl.glColor3f(color[0],color[1], color[2]); // grey
-        gl.glVertex3f(-10.0f, 0.0f, 0.0f);
-        gl.glVertex3f(-10.0f, 6.0f, 0.0f);
+        gl.glVertex3f(-1.0f, 0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, 6.0f, 0.0f);
         gl.glVertex3f(0.0f, 6.0f, 0.0f);
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
         
         // Back-face
         //gl.glColor3f(1.0f, 0.0f, 1.0f); // purple
-        gl.glVertex3f(-10.0f, 0.0f, 10.0f);
-        gl.glVertex3f(-10.0f, 6.0f, 10.0f);
+        gl.glVertex3f(-1.0f, 0.0f, 10.0f);
+        gl.glVertex3f(-1.0f, 6.0f, 10.0f);
         gl.glVertex3f(0.0f, 6.0f, 10.0f);
         gl.glVertex3f(0.0f, 0.0f, 10.0f);
         
@@ -128,24 +128,24 @@ public class Source {
 
         // Right-face
         //gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
-        gl.glVertex3f(-10.0f, 0.0f, 0.0f);
-        gl.glVertex3f(-10.0f, 6.0f, 0.0f);
-        gl.glVertex3f(-10.0f, 6.0f, 10.0f);
-        gl.glVertex3f(-10.0f, 0.0f, 10.0f);
+        gl.glVertex3f(-1.0f, 0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, 6.0f, 0.0f);
+        gl.glVertex3f(-1.0f, 6.0f, 10.0f);
+        gl.glVertex3f(-1.0f, 0.0f, 10.0f);
 
         // Top-face
         //gl.glColor3f(1.0f, 1.0f, 0.0f); // yellow
         gl.glVertex3f(0.0f, 6.0f, 0.0f);
         gl.glVertex3f(0.0f, 6.0f, 10.0f);
-        gl.glVertex3f(-10.0f, 6.0f, 0.0f);
-        gl.glVertex3f(-10.0f, 6.0f, 10.0f);
+        gl.glVertex3f(-1.0f, 6.0f, 0.0f);
+        gl.glVertex3f(-1.0f, 6.0f, 10.0f);
 
         // Bottom-face
         //gl.glColor3f(0.0f, 1.0f, 1.0f); // cyan        
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
         gl.glVertex3f(0.0f, 0.0f, 10.0f);
-        gl.glVertex3f(-10.0f, 0.0f, 0.0f);
-        gl.glVertex3f(-10.0f, 0.0f, 10.0f);
+        gl.glVertex3f(-1.0f, 0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, 0.0f, 10.0f);
 
         gl.glEnd();                
         gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe   

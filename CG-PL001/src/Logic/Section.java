@@ -5,6 +5,7 @@
  */
 package Logic;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
 
@@ -23,6 +24,7 @@ public class Section {
     private float[] color;
     private float angle;
     private Source source;
+    private boolean isFirst;
 
     public Source getSource() {
         return source;
@@ -39,7 +41,7 @@ public class Section {
     public void setAngle(float angle) {
         this.angle = angle;
     }
-   
+
     public float getOriginX() {
         return originX;
     }
@@ -64,8 +66,9 @@ public class Section {
         this.originZ = originZ;
     }
 
-    public Section(boolean isAuxiliar) {
+    public Section(boolean isAuxiliar, boolean isFirst) {
         this.isAuxiliar = isAuxiliar;
+        this.isFirst = isFirst;
         color = new float[3];
         color[0] = 1.0f;
         color[1] = 1.0f;
@@ -151,7 +154,52 @@ public class Section {
         gl.glVertex3f(3.5f, -0.3f, 10.0f);
         gl.glVertex3f(-3.5f, -0.3f, 10.0f);
         gl.glVertex3f(-3.5f, -0.3f, 0.0f);
+        float b;
+        float beta;
+        float deltaZ = 0;
+        float deltaX = 0;
+        if (!isFirst && angle < 0) {
+            b = (float) (7 * Math.sin((angle * Math.PI) / (2 * 180)));
+            beta = (float) (((90 - ((180 - angle) / 2)) * Math.PI) / 180);
+            deltaZ = (float) (b * Math.cos(beta));
+            deltaX = (float) (b * Math.sin(beta));
+            gl.glVertex3f(3.5f, 0.0f, 0.0f);
+            gl.glVertex3f(3.5f - deltaX, 0.0f, deltaZ);
+            gl.glVertex3f(3.5f, -0.3f, 0.0f);
+            gl.glVertex3f(3.5f - deltaX, -0.3f, deltaZ);
 
+        } else if (!isFirst && angle > 0) {
+            b = (float) (7 * Math.sin((angle * Math.PI) / (2 * 180)));
+            beta = (float) (((90 - ((180 - angle) / 2)) * Math.PI) / 180);
+            deltaZ = (float) (b * Math.cos(beta));
+            deltaX = (float) (b * Math.sin(beta));
+            gl.glVertex3f(-3.5f, 0.0f, 0.0f);
+            gl.glVertex3f(-3.5f + deltaX, 0.0f, -deltaZ);
+            gl.glVertex3f(-3.5f, -0.3f, 0.0f);
+            gl.glVertex3f(-3.5f + deltaX, -0.3f, -deltaZ);
+
+        }
+
+        gl.glEnd();
+
+        gl.glBegin(GL.GL_TRIANGLES); // of the color cube
+        if (!isFirst && angle < 0) {
+            gl.glVertex3f(0.0f, 0.0f, 0.0f);
+            gl.glVertex3f(3.5f, 0.0f, 0.0f);
+            gl.glVertex3f(3.5f - deltaX, 0.0f, deltaZ);
+
+            gl.glVertex3f(0.0f, -0.3f, 0.0f);
+            gl.glVertex3f(3.5f, -0.3f, 0.0f);
+            gl.glVertex3f(3.5f - deltaX, -0.3f, deltaZ);
+        } else if (!isFirst && angle > 0) {
+            gl.glVertex3f(0.0f, 0.0f, 0.0f);
+            gl.glVertex3f(-3.5f, 0.0f, 0.0f);
+            gl.glVertex3f(-3.5f + deltaX, 0.0f, -deltaZ);
+
+            gl.glVertex3f(0.0f, -0.3f, 0.0f);
+            gl.glVertex3f(-3.5f, -0.3f, 0.0f);
+            gl.glVertex3f(-3.5f + deltaX, -0.3f, -deltaZ);
+        }
         gl.glEnd();
         gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe 
 
