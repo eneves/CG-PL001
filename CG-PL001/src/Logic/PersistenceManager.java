@@ -37,7 +37,7 @@ public class PersistenceManager {
             Simulator simulator = new Simulator(isEditorMode);
             simulator.setRoad(road);
             simulator.setSources(sources);
-            
+
             return simulator;
 
         } catch (Exception e) {
@@ -51,9 +51,17 @@ public class PersistenceManager {
         float x = 0;
         float y = 0;
         float z = 0;
+        float angle = 0;
         for (int i = 0; i < road.length; i++) {
-            Section section = new Section(i == 0 || i == road.length - 1);
+            Section section = new Section(i == 0 || i == road.length - 1, i == 1);
             if (!section.isAuxiliar()) {
+                if (angle < 90) {
+                    angle += 20;
+                    section.setAngle(20);
+                } else {
+                    angle -= 20;
+                    section.setAngle(-20);
+                }
                 section.setOriginX(x);
                 section.setOriginY(y);
                 section.setOriginZ(z);
@@ -69,6 +77,7 @@ public class PersistenceManager {
         source.setOriginX(section.getOriginX() - 3.5f);
         source.setOriginY(section.getOriginY());
         source.setOriginZ(section.getOriginZ());
+        source.setOn(true);
         return source;
     }
 
@@ -82,10 +91,13 @@ public class PersistenceManager {
         Section[] road = createRoad(12);
         ArrayList<Source> sources = new ArrayList();
         Source s1 = createSource(1, 2, road[1]);
+        road[1].setSource(s1);
         sources.add(s1);
         Source s2 = createSource(4, 4, road[4]);
+        road[4].setSource(s2);
         sources.add(s2);
         Source s3 = createSource(5, 5, road[5]);
+        road[5].setSource(s3);
         sources.add(s3);
         Simulator simulator = new Simulator(isEditorMode);
         simulator.setRoad(road);
