@@ -36,36 +36,10 @@ public class AppListener
         switch (chars) {
             /*
             case 'm': //passa para o segmento seguinte
-                if (this.simulator.getActualSection() <= this.simulator.getRoad().size() - 1) {
-                    this.simulator.increaseActualSection();
-                }
+
                 System.out.println("m pressionada!");
                 break;
-            case 'n'://passa para o segmento anterior
-                if (this.simulator.getActualSection() > 0) {
-                    this.simulator.decreaseActualSection();
-                }
-                System.out.println("n pressionada!");
-                break;
-            case 'k'://insere segmento depois do actual
-                if (this.simulator.getActualSection() > 0) {
-                    this.simulator.decreaseActualSection();
-                }
-                System.out.println("n pressionada!");
-                break;
-            case 'j'://insere segmento antes do actual
-                if (this.simulator.getActualSection() > 0) {
-                    this.simulator.decreaseActualSection();
-                }
-                System.out.println("n pressionada!");
-                break;
-            case 'i'://insere fonte no segmento actual
-                if (this.simulator.getActualSection() > 0) {
-                    this.simulator.decreaseActualSection();
-                }
-                System.out.println("n pressionada!");
-                break;
-            */
+
             case 'ç'://grava um ficheiro com a configuração actual
                 PersistenceManager.saveSimulator();
                 System.out.println("Edição actual gravada no ficheiro de texto");
@@ -181,6 +155,7 @@ public class AppListener
             simulator.toogleAnimation();
             AnimationThread animation = new AnimationThread();
             new Thread(animation).start();
+
         }
     }
 
