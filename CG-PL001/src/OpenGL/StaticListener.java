@@ -121,10 +121,14 @@ public class StaticListener
     }
 
     public float getViewAngle() {
+        float z0 = center[2] - eye[2];
+        return (float) Math.asin(z0 / distanceEyeToCenter());
+    }
+
+    public float distanceEyeToCenter() {
         float x0 = center[0] - eye[0];
         float z0 = center[2] - eye[2];
-        double dist = Math.sqrt(Math.pow(z0, 2) + Math.pow(x0, 2));
-        return (float) Math.asin(z0 / dist);
+        return (float) Math.sqrt(Math.pow(z0, 2) + Math.pow(x0, 2));
     }
 
     @Override

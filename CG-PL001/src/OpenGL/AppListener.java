@@ -70,6 +70,11 @@ public class AppListener
                 this.eye[2] += 0.1f * Math.sin(viewAngle);
                 this.center[2] += 0.1f * Math.sin(viewAngle);
                 break;
+            case 'e':
+                //viewAngle +=0.17;
+                this.center[0] += (float) (distanceEyeToCenter() * Math.sin(0.17));
+                this.center[2] -= (float) (distanceEyeToCenter() * Math.sin(0.17));
+                break;
             case ' ':
                 this.simulator.setIsEditorMode(true);
                 break;
@@ -100,12 +105,6 @@ public class AppListener
                 double angle = Math.asin(this.center[0] / h);
                 this.center[0] = (float) (h * Math.sin(angle + 0.17));
                 this.center[2] = (float) (h * Math.cos(angle + 0.17));
-                break;
-            case 'e':
-                h = Math.sqrt(Math.pow(this.center[0], 2) + Math.pow(this.center[2], 2));
-                angle = Math.asin(center[0] / h);
-                this.center[0] = (float) (h * Math.sin(angle - 0.17));
-                this.center[2] = (float) (h * Math.cos(angle - 0.17));
                 break;
             case 'r':
                 this.eye[1] += 0.1f;
