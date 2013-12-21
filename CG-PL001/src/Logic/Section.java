@@ -49,7 +49,7 @@ public class Section {
         this.isAuxiliar = isAuxiliar;
     }
 
-    public boolean isIsAuxiliar() {
+    public boolean isAuxiliar() {
         return isAuxiliar;
     }
 

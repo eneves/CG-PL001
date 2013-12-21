@@ -88,7 +88,7 @@ public class Simulator {
 
     public void render(GL2 gl) {
         for (Section section : road) {
-            if (!section.isIsAuxiliar())
+            if (!section.isAuxiliar())
                 section.render(gl);
         }
         for (Source source : sources) {
