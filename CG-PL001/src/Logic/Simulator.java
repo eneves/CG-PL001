@@ -15,14 +15,16 @@ import javax.media.opengl.GL2;
 public class Simulator {
 
     private TrafficManager trafficManager;
-    private Section[] road;
+    private ArrayList<Section> road;
     private ArrayList<Source> sources;
+    private int actualSection;
     private boolean isEditorMode;
     private int currentInstant;
 
     public Simulator(boolean isEditorMode) {
         this.isEditorMode = isEditorMode;
         trafficManager = new TrafficManager();
+        actualSection = 0;
         currentInstant = 0;
     }
 
@@ -30,13 +32,25 @@ public class Simulator {
         this.isEditorMode = isEditorMode;
     }
 
-    public Section[] getRoad() {
+    public ArrayList<Section> getRoad() {
         return road;
     }
 
-    public void setRoad(Section[] road) {
+    public void setRoad(ArrayList<Section> road) {
         this.road = road;
     }
+
+    public int getActualSection() {
+        return actualSection;
+    }
+
+    public void increaseActualSection() {
+        this.actualSection ++;
+    }
+    
+      public void decreaseActualSection() {
+        this.actualSection --;
+    }  
 
     public ArrayList<Source> getSources() {
         return sources;
@@ -60,8 +74,8 @@ public class Simulator {
         }
         sb.append("Current road status (t=").append(currentInstant).append(") :\n");
         //int index = 0;
-        for (int i = road.length - 1; i >= 0; i--) {
-            Section s = road[i];
+        for (int i = road.size() - 1; i >= 0; i--) {
+            Section s = road.get(i);
             sb.append(s.toString()).append(" ").append(haveSource(i) ? "I" : "O");
             sb.append(" -> (").append(i).append(")\n");
         }
