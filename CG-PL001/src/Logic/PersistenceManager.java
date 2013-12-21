@@ -20,39 +20,49 @@ public class PersistenceManager {
     public static Simulator loadSimulator(String filename, boolean isEditorMode) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(filename));
-            int number = Integer.parseInt(in.readLine());
-            Section[] road = new Section[number + 2];
-            float x = 0;
-            float y = 0;
-            float z = 0;
-            for (int i = 0; i < road.length; i++) {
-                Section section = new Section(i == 0 || i == road.length - 1);
-                if (i != 0 && i != 11) {
-                    section.setOriginX(x);
-                    section.setOriginY(y);
-                    section.setOriginZ(z);
-                    z += 10;
-                }
-                road[i] = section;
-            }
+            Section[] road = createRoad(Integer.parseInt(in.readLine()));
             String str;
             int sourcePos = 1;
             String[] vecStr;
-            while((str = in.readLine()) != null){
+            while ((str = in.readLine()) != null) {
                 vecStr = str.split(" ");
                 int isSource = Integer.parseInt(vecStr[1]);
-                if(isSource != -1){
-                    
+                if (isSource != -1) {
+
                 }
-                
+
             }
-
-
 
         } catch (Exception e) {
             return loadDefaults(isEditorMode);
         }
         return loadDefaults(isEditorMode);
+    }
+
+    private static Section[] createRoad(int segmentsNumber) {
+        Section[] road = new Section[segmentsNumber + 2];
+        float x = 0;
+        float y = 0;
+        float z = 0;
+        for (int i = 0; i < road.length; i++) {
+            Section section = new Section(i == 0 || i == road.length - 1);
+            if (!section.isAuxiliar()) {
+                section.setOriginX(x);
+                section.setOriginY(y);
+                section.setOriginZ(z);
+                z += 10;
+            }
+            road[i] = section;
+        }
+        return road;
+    }
+
+    private static Source createSource(int position, int period, Section section) {
+        Source source = new Source(position, period, section);
+        source.setOriginX(section.getOriginX() - 3.5f);
+        source.setOriginY(section.getOriginY());
+        source.setOriginZ(section.getOriginZ());
+        return source;
     }
 
     //Caso o ficheiro não exista, deve ser criada uma rede de estradas com as características apresentadas na tabela 1.
