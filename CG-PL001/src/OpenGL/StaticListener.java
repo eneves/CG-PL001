@@ -1,14 +1,14 @@
 package OpenGL;
 
 import Logic.Simulator;
+import com.jogamp.opengl.util.awt.TextRenderer;
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.media.opengl.GL;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
 import static javax.media.opengl.GL.GL_LEQUAL;
-import static javax.media.opengl.GL.GL_NEVER;
 import static javax.media.opengl.GL.GL_NICEST;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
@@ -56,6 +56,7 @@ public class StaticListener
     protected final GLCanvas canvas;
 
     protected final Simulator simulator;
+    private TextRenderer renderer;
 
     StaticListener(GLCanvas canvas, Simulator simulator) {
         this.canvas = canvas;
@@ -73,6 +74,8 @@ public class StaticListener
         gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // best perspective correction
         gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting
 
+        renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
+        
         System.out.println("GLEventListener.init(GLAutoDrawable)");
     }
 
@@ -93,8 +96,15 @@ public class StaticListener
                 this.center[0], this.center[1], this.center[2],
                 this.up[0], this.up[1], this.up[2]
         );
-
         simulator.render(gl);
+        
+        renderer.beginRendering(drawable.getWidth(), drawable.getHeight());
+        // optionally set the color
+        renderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
+        renderer.draw("Text to draw", 100, 10);
+        // ... more draw commands, color changes, etc.
+        renderer.endRendering();
+        
     }
 
     @Override

@@ -5,6 +5,9 @@
  */
 package Logic;
 
+import com.jogamp.opengl.util.awt.TextRenderer;
+import java.awt.Color;
+import java.awt.Font;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
@@ -55,7 +58,7 @@ public class Car {
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Front-face
-        gl.glColor3f(color[0],color[1], color[2]); // green
+        gl.glColor3f(color[0], color[1], color[2]); // green
 
         gl.glVertex3f(1.0f, 0.0f, 0.0f);
         gl.glVertex3f(1.0f, 1.5f, 0.0f);

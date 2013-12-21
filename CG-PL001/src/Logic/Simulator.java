@@ -5,6 +5,9 @@
  */
 package Logic;
 
+import com.jogamp.opengl.util.awt.TextRenderer;
+import java.awt.Color;
+import java.awt.Font;
 import java.util.ArrayList;
 import javax.media.opengl.GL2;
 
@@ -24,6 +27,10 @@ public class Simulator {
         this.isEditorMode = isEditorMode;
         trafficManager = new TrafficManager();
         currentInstant = 0;
+    }
+
+    public void setIsEditorMode(boolean isEditorMode) {
+        this.isEditorMode = isEditorMode;
     }
 
     public Section[] getRoad() {
