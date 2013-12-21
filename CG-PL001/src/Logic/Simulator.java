@@ -5,9 +5,6 @@
  */
 package Logic;
 
-import com.jogamp.opengl.util.awt.TextRenderer;
-import java.awt.Color;
-import java.awt.Font;
 import java.util.ArrayList;
 import javax.media.opengl.GL2;
 

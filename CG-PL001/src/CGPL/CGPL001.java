@@ -2,7 +2,7 @@ package CGPL;
 
 import Logic.PersistenceManager;
 import Logic.Simulator;
-import OpenGL.ExampleListener;
+import OpenGL.AppListener;
 import OpenGL.StaticListener;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
@@ -45,7 +45,7 @@ public class CGPL001 {
         canvas = new GLCanvas(caps);
 
         Frame frame = new Frame("Auto-Estrada");
-        frame.setSize(640, 480);
+        frame.setSize(1024, 768);
         frame.add(canvas);
         frame.setVisible(true);
 
@@ -55,13 +55,14 @@ public class CGPL001 {
                 System.exit(0);
             }
         });
+        frame.setResizable(false);
 
         StaticListener listener;
-        listener = new ExampleListener(canvas, simulator);
+        listener = new AppListener(canvas, simulator);
 //		listener = new ProjectionListener (canvas);
 //		listener = new LineCameraListener (canvas, new float[] {3, -1, -1}, new float[] {3,1,1});
 //		listener = new RotatingLineCameraListener (canvas, new float[] {3, -1, -1}, new float[] {3,1,1});
         canvas.addGLEventListener(listener);
-        canvas.addKeyListener(listener);
+        canvas.addKeyListener(listener);        
     }
 }

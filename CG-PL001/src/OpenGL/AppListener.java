@@ -1,9 +1,6 @@
 package OpenGL;
 
 import Logic.Simulator;
-import com.jogamp.opengl.util.awt.TextRenderer;
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import javax.media.opengl.awt.GLCanvas;
 
@@ -12,10 +9,10 @@ import javax.media.opengl.awt.GLCanvas;
  *
  * @author Pedro Mariano
  */
-public class ExampleListener
+public class AppListener
         extends StaticListener {
 
-    public ExampleListener(GLCanvas canvas, Simulator simulator) {
+    public AppListener(GLCanvas canvas, Simulator simulator) {
         super(canvas, simulator);
     }
 
@@ -84,7 +81,7 @@ public class ExampleListener
                     return;
             }
         }
-        this.canvas.setBounds(10, 10, 640, 480);
+        //this.canvas.setBounds(10, 10, 1024, 768);
         this.canvas.display();
         this.status();
     }
@@ -98,7 +95,7 @@ public class ExampleListener
             default:
                 return;
         }
-        this.canvas.setBounds(10, 10, 640, 480);
+        //this.canvas.setBounds(10, 10, 1024, 768);
         this.canvas.display();
         this.status();
     }

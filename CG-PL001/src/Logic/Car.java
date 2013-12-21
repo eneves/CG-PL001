@@ -5,10 +5,6 @@
  */
 package Logic;
 
-import com.jogamp.opengl.util.awt.TextRenderer;
-import java.awt.Color;
-import java.awt.Font;
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
 
