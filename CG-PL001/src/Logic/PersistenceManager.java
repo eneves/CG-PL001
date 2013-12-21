@@ -20,24 +20,31 @@ public class PersistenceManager {
     public static Simulator loadSimulator(String filename, boolean isEditorMode) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(filename));
-            Section[] road = createRoad(Integer.parseInt(in.readLine()));
+            Section[] road = new Section[Integer.parseInt(in.readLine()) + 2];
+            float x = 0;
+            float y = 0;
+            float z = 0;
             String str;
-            int sourcePos = 1;
             String[] vecStr;
-            ArrayList<Source> sources = new ArrayList();
+            int index = 0;
             while ((str = in.readLine()) != null) {
                 vecStr = str.split(" ");
-                int isSource = Integer.parseInt(vecStr[1]);
-                if (isSource != -1) {
-                    Source s = createSource(sourcePos, isSource, road[sourcePos]);
-                    sources.add(s);
+                Section section = new Section(index == 0 || index == road.length - 1);
+                if (!section.isAuxiliar()) {
+                    section.setOriginX(x);
+                    section.setOriginY(y);
+                    section.setOriginZ(z);
+                    z += 10;
+                    section.setAngle(Float.parseFloat(vecStr[0]));
+                    if (Integer.parseInt(vecStr[1]) != -1) {
+                        section.setSource(createSource(index, Integer.parseInt(vecStr[1]), section));
+                    }
                 }
-                sourcePos++;
+                road[index] = section;
+
             }
             Simulator simulator = new Simulator(isEditorMode);
             simulator.setRoad(road);
-            simulator.setSources(sources);
-            
             return simulator;
 
         } catch (Exception e) {
@@ -65,7 +72,7 @@ public class PersistenceManager {
     }
 
     private static Source createSource(int position, int period, Section section) {
-        Source source = new Source(position, period, section);
+        Source source = new Source(position, period);
         source.setOriginX(section.getOriginX() - 3.5f);
         source.setOriginY(section.getOriginY());
         source.setOriginZ(section.getOriginZ());
@@ -80,17 +87,14 @@ public class PersistenceManager {
     //Tabela 1: Características da rede de estradas quando é omitido o nome do ficheiro.
     private static Simulator loadDefaults(boolean isEditorMode) {
         Section[] road = createRoad(12);
-        ArrayList<Source> sources = new ArrayList();
         Source s1 = createSource(1, 2, road[1]);
-        sources.add(s1);
+        road[1].setSource(s1);
         Source s2 = createSource(4, 4, road[4]);
-        sources.add(s2);
+        road[4].setSource(s2);
         Source s3 = createSource(5, 5, road[5]);
-        sources.add(s3);
+        road[5].setSource(s3);
         Simulator simulator = new Simulator(isEditorMode);
         simulator.setRoad(road);
-        simulator.setSources(sources);
-
         return simulator;
     }
 
