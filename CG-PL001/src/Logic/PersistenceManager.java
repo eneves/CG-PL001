@@ -7,7 +7,6 @@ package Logic;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
 
 /**
  *
@@ -29,7 +28,7 @@ public class PersistenceManager {
             int index = 0;
             while ((str = in.readLine()) != null) {
                 vecStr = str.split(" ");
-                Section section = new Section(index == 0 || index == road.length - 1);
+                Section section = new Section(index == 0 || index == road.length - 1, index == 0);
                 if (!section.isAuxiliar()) {
                     section.setOriginX(x);
                     section.setOriginY(y);
@@ -59,7 +58,7 @@ public class PersistenceManager {
         float y = 0;
         float z = 0;
         for (int i = 0; i < road.length; i++) {
-            Section section = new Section(i == 0 || i == road.length - 1);
+            Section section = new Section(i == 0 || i == road.length - 1, i == 0);
             if (!section.isAuxiliar()) {
                 section.setOriginX(x);
                 section.setOriginY(y);
