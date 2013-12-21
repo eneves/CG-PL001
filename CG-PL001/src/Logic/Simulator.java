@@ -21,7 +21,6 @@ public class Simulator {
     private TrafficManager trafficManager;
     private ArrayList<Section> road;
     private ArrayList<Source> sources;
-    private int actualSection;
     private boolean editorMode;
     private int currentInstant;
     private boolean animationRunning;
