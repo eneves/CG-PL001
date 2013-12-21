@@ -24,20 +24,11 @@ public class CGPL001 {
 
     private static GLCanvas canvas;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
         Simulator simulator = PersistenceManager.loadSimulator("highway_data", true);
 
         startOpenGLWindow(simulator);
-
-        System.out.print(simulator.toString());
-        while (true) {
-            simulator.incrementInstant();
-            canvas.display();
-            TimeUnit.MILLISECONDS.sleep(150);
-            //System.out.print(simulator.toString());
-        }
-
     }
 
     public static void startOpenGLWindow(Simulator simulator) {

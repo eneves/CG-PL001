@@ -33,7 +33,6 @@ public class TextDisplayer {
         upperRight = new TextRenderer(new Font("SansSerif", Font.BOLD, FONT_SIZE));
         upperRight.setColor(Color.red);
         urString = new ArrayList<>();
-        urString.add("UpperRight");
         DownerLeft = new TextRenderer(new Font("SansSerif", Font.BOLD, FONT_SIZE));
         DownerLeft.setColor(Color.green);
         dlString = new ArrayList<>();

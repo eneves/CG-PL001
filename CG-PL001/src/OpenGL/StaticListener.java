@@ -27,7 +27,7 @@ public class StaticListener
         implements
         GLEventListener,
         KeyListener,
-        MouseListener{
+        MouseListener {
 
     /**
      * Use a perspective or a parallel projection.
@@ -56,7 +56,7 @@ public class StaticListener
      */
     protected final GLCanvas canvas;
 
-    protected final Simulator simulator;
+    protected volatile Simulator simulator;
     private TextDisplayer textDisplay;
 
     StaticListener(GLCanvas canvas, Simulator simulator) {
@@ -76,7 +76,6 @@ public class StaticListener
         gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting
 
         textDisplay = new TextDisplayer();
-        textDisplay.addLineUrString("this is a new line");
         textDisplay.addLineDlString("this is a new line");
         textDisplay.addLineDrString("this is a new line");
 
@@ -108,6 +107,8 @@ public class StaticListener
     private void updateText() {
         textDisplay.clearUlString();
         textDisplay.addLineUlString(simulator.isIsEditorMode() ? "Editor" : "Simulator");
+        textDisplay.addLineUlString(simulator.isAnimationRunning() ? "Running" : "Stopped");
+        textDisplay.addLineUlString("T = " + simulator.getCurrentInstant());
         textDisplay.clearDlString();
         textDisplay.addLineDlString(this.perspectiveProjection ? "Perspective" : "Parallel");
         textDisplay.addLineDlString(String.format("Left Right: %5.1f .. %5.1f", this.left, this.right));
@@ -116,6 +117,14 @@ public class StaticListener
         textDisplay.addLineDlString(String.format("   Eye:  ( %5.1f , %5.1f , %5.1f )", this.eye[0], this.eye[1], this.eye[2]));
         textDisplay.addLineDlString(String.format("Center:  ( %5.1f , %5.1f , %5.1f )", this.center[0], this.center[1], this.center[2]));
         textDisplay.addLineDlString(String.format("    Up:  ( %5.1f , %5.1f , %5.1f )", this.up[0], this.up[1], this.up[2]));
+        textDisplay.addLineDlString(String.format("View angle:  ( %5.1f º)", Math.toDegrees(getViewAngle())));
+    }
+
+    public float getViewAngle() {
+        float x0 = center[0] - eye[0];
+        float z0 = center[2] - eye[2];
+        double dist = Math.sqrt(Math.pow(z0, 2) + Math.pow(x0, 2));
+        return (float) Math.asin(z0 / dist);
     }
 
     @Override
@@ -165,7 +174,7 @@ public class StaticListener
     }
 
     @Override
-    public void mouseClicked(MouseEvent me) {      
+    public void mouseClicked(MouseEvent me) {
     }
 
     @Override

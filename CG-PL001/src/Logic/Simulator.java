@@ -5,7 +5,11 @@
  */
 package Logic;
 
+import javax.media.opengl.awt.GLCanvas;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.media.opengl.GL2;
 
 /**
@@ -17,17 +21,20 @@ public class Simulator {
     private TrafficManager trafficManager;
     private Section[] road;
     private ArrayList<Source> sources;
-    private boolean isEditorMode;
+    private boolean editorMode;
     private int currentInstant;
+    private boolean animationRunning;
+    private Section selectedSection;
 
     public Simulator(boolean isEditorMode) {
-        this.isEditorMode = isEditorMode;
+        this.editorMode = isEditorMode;
         trafficManager = new TrafficManager();
+        animationRunning = false;
         currentInstant = 0;
     }
 
-    public void setIsEditorMode(boolean isEditorMode) {
-        this.isEditorMode = isEditorMode;
+    public void setIsEditorMode(boolean editorMode) {
+        this.editorMode = editorMode;
     }
 
     public Section[] getRoad() {
@@ -47,13 +54,13 @@ public class Simulator {
     }
 
     public boolean isIsEditorMode() {
-        return isEditorMode;
+        return editorMode;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Mode : ");
-        sb.append(isEditorMode ? "Editor" : "Simulator").append("\n");
+        sb.append(editorMode ? "Editor" : "Simulator").append("\n");
         sb.append("Sources:\n");
         for (Source s : sources) {
             sb.append(s.toString()).append("\n");
@@ -95,4 +102,72 @@ public class Simulator {
         }
     }
 
+    public void toogleAnimation() {
+        animationRunning = !animationRunning;
+        if (animationRunning)
+            removeSelection();
+    }
+
+    public boolean isAnimationRunning() {
+        return animationRunning;
+    }
+
+    public int getCurrentInstant() {
+        return currentInstant;
+    }
+
+    public Section getSelectedSection() {
+        return selectedSection;
+    }
+
+    public void setSelectedSection(Section selectedSection) {
+        this.selectedSection = selectedSection;
+    }
+
+    public void selectLeft() {
+        if (selectedSection == null) {
+            selectedSection = road[1];
+            selectedSection.setSelected(true);
+        } else {
+            for (int i = 0; i < road.length; i++) {
+                if (road[i] == selectedSection) {
+                    selectedSection.setSelected(false);
+                    selectedSection = road[i + 1];
+                    if (selectedSection.isAuxiliar())                        
+                        selectedSection = road[1];
+                    selectedSection.setSelected(true);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void selectRight() {
+        if (selectedSection == null) {
+            selectedSection = road[road.length - 2];
+            selectedSection.setSelected(true);
+        } else {
+            for (int i = 0; i < road.length; i++) {
+                if (road[i] == selectedSection) {
+                    selectedSection.setSelected(false);
+                    selectedSection = road[i - 1];
+                    if (selectedSection.isAuxiliar())                        
+                        selectedSection = road[road.length - 2];
+                    selectedSection.setSelected(true);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void removeSelection() {
+        if (selectedSection != null) {
+            selectedSection.setSelected(false);
+            selectedSection = null;
+        }
+    }
+
+    public boolean hadSelection() {
+        return selectedSection != null;
+    }
 }

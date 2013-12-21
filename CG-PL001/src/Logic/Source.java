@@ -23,8 +23,15 @@ public class Source {
     private float originZ;
     private float[] color;
     private static Random rd = new Random();
-    //private Section destination;
-    //private Section origin;
+    private boolean on;
+
+    public boolean isOn() {
+        return on;
+    }
+
+    public void setOn(boolean on) {
+        this.on = on;
+    }
 
     public float[] getColor() {
         return color;
@@ -54,13 +61,12 @@ public class Source {
         this.originZ = originZ;
     }
 
-
     public Source(int position, int period, Section origin) {
         this.period = period;
         //this.origin = origin;
         this.position = position;
         currentTick = 0;
-        
+
         this.color = new float[3];
         this.color[0] = rd.nextFloat();
         this.color[1] = rd.nextFloat();
@@ -74,8 +80,6 @@ public class Source {
     public int getPosition() {
         return position;
     }
-
-    
 
     /*public Section getOrigin() {
      return origin;
@@ -104,21 +108,25 @@ public class Source {
     public void render(GL2 gl) {
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
         gl.glBegin(GL_QUADS); // of the color cube
-        
+
         // Front-face
-        gl.glColor3f(color[0],color[1], color[2]); // grey
+        if (on) {
+            gl.glColor3f(color[0], color[1], color[2]); // grey
+        } else {
+            gl.glColor3f(0.8f, 0.8f, 0.8f); // grey
+        }
         gl.glVertex3f(-1.0f, 0.0f, 0.0f);
         gl.glVertex3f(-1.0f, 6.0f, 0.0f);
         gl.glVertex3f(0.0f, 6.0f, 0.0f);
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
-        
+
         // Back-face
         //gl.glColor3f(1.0f, 0.0f, 1.0f); // purple
         gl.glVertex3f(-1.0f, 0.0f, 10.0f);
         gl.glVertex3f(-1.0f, 6.0f, 10.0f);
         gl.glVertex3f(0.0f, 6.0f, 10.0f);
         gl.glVertex3f(0.0f, 0.0f, 10.0f);
-        
+
         // Left-face
         //gl.glColor3f(1.0f, 0.0f, 0.0f); // red
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
@@ -147,7 +155,7 @@ public class Source {
         gl.glVertex3f(-1.0f, 0.0f, 0.0f);
         gl.glVertex3f(-1.0f, 0.0f, 10.0f);
 
-        gl.glEnd();                
+        gl.glEnd();
         gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe   
     }
 }
