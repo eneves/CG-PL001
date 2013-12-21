@@ -22,8 +22,8 @@ public class TrafficManager {
 
     public Section[] processTraffic(Section[] inicialRoad) {
         Section[] finalRoad = new Section[inicialRoad.length];
-        finalRoad[0] = new Section(true);
-        finalRoad[inicialRoad.length - 1] = new Section(true);
+        finalRoad[0] = new Section(true, false);
+        finalRoad[inicialRoad.length - 1] = new Section(true, false);
         for (int i = 1; i < inicialRoad.length - 1; i++) {
             int lineIndex = (inicialRoad[i - 1].getLeftSide() == null ? 0 : 1) * 4
                     + (inicialRoad[i].getLeftSide() == null ? 0 : 1) * 2
@@ -31,7 +31,7 @@ public class TrafficManager {
             int columnIndex = (inicialRoad[i - 1].getRightSide() == null ? 0 : 1) * 4
                     + (inicialRoad[i].getRightSide() == null ? 0 : 1) * 2
                     + (inicialRoad[i + 1].getRightSide() == null ? 0 : 1) * 1;
-            Section section = new Section(false);
+            Section section = new Section(false, i == 1);
             section.setAngle(inicialRoad[i].getAngle());
             section.setOriginX(inicialRoad[i].getOriginX());
             section.setOriginY(inicialRoad[i].getOriginY());
