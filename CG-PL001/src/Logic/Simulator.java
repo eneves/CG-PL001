@@ -19,7 +19,7 @@ import javax.media.opengl.GL2;
 public class Simulator {
 
     private TrafficManager trafficManager;
-    private Section[] road;
+    private ArrayList<Section> road;
     private ArrayList<Source> sources;
     private boolean editorMode;
     private int currentInstant;
@@ -37,13 +37,25 @@ public class Simulator {
         this.editorMode = editorMode;
     }
 
-    public Section[] getRoad() {
+    public ArrayList<Section> getRoad() {
         return road;
     }
 
-    public void setRoad(Section[] road) {
+    public void setRoad(ArrayList<Section> road) {
         this.road = road;
     }
+
+    public int getActualSection() {
+        return actualSection;
+    }
+
+    public void increaseActualSection() {
+        this.actualSection ++;
+    }
+    
+      public void decreaseActualSection() {
+        this.actualSection --;
+    }  
 
     public ArrayList<Source> getSources() {
         return sources;
@@ -67,8 +79,8 @@ public class Simulator {
         }
         sb.append("Current road status (t=").append(currentInstant).append(") :\n");
         //int index = 0;
-        for (int i = road.length - 1; i >= 0; i--) {
-            Section s = road[i];
+        for (int i = road.size() - 1; i >= 0; i--) {
+            Section s = road.get(i);
             sb.append(s.toString()).append(" ").append(haveSource(i) ? "I" : "O");
             sb.append(" -> (").append(i).append(")\n");
         }
@@ -126,15 +138,15 @@ public class Simulator {
 
     public void selectLeft() {
         if (selectedSection == null) {
-            selectedSection = road[1];
+            selectedSection = road.get(1);
             selectedSection.setSelected(true);
         } else {
-            for (int i = 0; i < road.length; i++) {
-                if (road[i] == selectedSection) {
+            for (int i = 0; i < road.size(); i++) {
+                if (road.get(i) == selectedSection) {
                     selectedSection.setSelected(false);
-                    selectedSection = road[i + 1];
+                    selectedSection = road.get(i+1);
                     if (selectedSection.isAuxiliar())                        
-                        selectedSection = road[1];
+                        selectedSection = road.get(1);
                     selectedSection.setSelected(true);
                     break;
                 }
@@ -144,15 +156,15 @@ public class Simulator {
 
     public void selectRight() {
         if (selectedSection == null) {
-            selectedSection = road[road.length - 2];
+            selectedSection = road.get(road.size() - 2);
             selectedSection.setSelected(true);
         } else {
-            for (int i = 0; i < road.length; i++) {
-                if (road[i] == selectedSection) {
+            for (int i = 0; i < road.size(); i++) {
+                if (road.get(i) == selectedSection) {
                     selectedSection.setSelected(false);
-                    selectedSection = road[i - 1];
+                    selectedSection = road.get(i-1);
                     if (selectedSection.isAuxiliar())                        
-                        selectedSection = road[road.length - 2];
+                        selectedSection = road.get(road.size() - 2);
                     selectedSection.setSelected(true);
                     break;
                 }

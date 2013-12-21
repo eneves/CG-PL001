@@ -7,6 +7,7 @@ package Logic;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,7 +20,7 @@ public class PersistenceManager {
     public static Simulator loadSimulator(String filename, boolean isEditorMode) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(filename));
-            Section[] road = new Section[Integer.parseInt(in.readLine()) + 2];
+            ArrayList<Section> road = new ArrayList(Integer.parseInt(in.readLine()) + 2);
             float x = 0;
             float y = 0;
             float z = 0;
@@ -28,7 +29,7 @@ public class PersistenceManager {
             int index = 0;
             while ((str = in.readLine()) != null) {
                 vecStr = str.split(" ");
-                Section section = new Section(index == 0 || index == road.length - 1, index == 0);
+                Section section = new Section(index == 0 || index == road.size() - 1, index == 0);
                 if (!section.isAuxiliar()) {
                     section.setOriginX(x);
                     section.setOriginY(y);
@@ -39,7 +40,7 @@ public class PersistenceManager {
                         section.setSource(createSource(index, Integer.parseInt(vecStr[1]), section));
                     }
                 }
-                road[index] = section;
+                road.add(section);
 
             }
             Simulator simulator = new Simulator(isEditorMode);
@@ -52,14 +53,14 @@ public class PersistenceManager {
         }
     }
 
-    private static Section[] createRoad(int segmentsNumber) {
-        Section[] road = new Section[segmentsNumber + 2];
+    private static ArrayList<Section> createRoad(int segmentsNumber) {
+        ArrayList<Section> road = new ArrayList(segmentsNumber + 2);
         float x = 0;
         float y = 0;
         float z = 0;
         float angle = 0;
-        for (int i = 0; i < road.length; i++) {
-            Section section = new Section(i == 0 || i == road.length - 1, i == 1);
+        for (int i = 0; i < road.size(); i++) {
+            Section section = new Section(i == 0 || i == road.size() - 1, i == 0);
             if (!section.isAuxiliar()) {
                 if (angle < 90) {
                     angle += 20;
@@ -73,7 +74,7 @@ public class PersistenceManager {
                 section.setOriginZ(z);
                 z += 10;
             }
-            road[i] = section;
+            road.add(section);
         }
         return road;
     }
@@ -94,13 +95,13 @@ public class PersistenceManager {
     //    estrada direita
     //Tabela 1: Características da rede de estradas quando é omitido o nome do ficheiro.
     private static Simulator loadDefaults(boolean isEditorMode) {
-        Section[] road = createRoad(12);
-        Source s1 = createSource(1, 2, road[1]);
-        road[1].setSource(s1);
-        Source s2 = createSource(4, 4, road[4]);
-        road[4].setSource(s2);
-        Source s3 = createSource(5, 5, road[5]);
-        road[5].setSource(s3);
+        ArrayList<Section> road = createRoad(10);
+        Source s1 = createSource(1, 2, road.get(1));
+        road.get(1).setSource(s1);
+        Source s2 = createSource(4, 4, road.get(4));
+        road.get(4).setSource(s2);
+        Source s3 = createSource(5, 5, road.get(5));
+        road.get(5).setSource(s3);
         Simulator simulator = new Simulator(isEditorMode);
         simulator.setRoad(road);
         return simulator;
