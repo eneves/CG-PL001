@@ -40,8 +40,8 @@ public class PersistenceManager {
                         section.setSource(createSource(index, Integer.parseInt(vecStr[1]), section));
                     }
                 }
-                road.add(section);
-
+                road.add(index, section);
+                index ++;
             }
             Simulator simulator = new Simulator(isEditorMode);
             simulator.setRoad(road);
@@ -74,7 +74,7 @@ public class PersistenceManager {
                 section.setOriginZ(z);
                 z += 10;
             }
-            road.add(section);
+            road.add(i, section);
         }
         return road;
     }
@@ -96,6 +96,7 @@ public class PersistenceManager {
     //Tabela 1: Características da rede de estradas quando é omitido o nome do ficheiro.
     private static Simulator loadDefaults(boolean isEditorMode) {
         ArrayList<Section> road = createRoad(10);
+        System.out.println(road.size());
         Source s1 = createSource(1, 2, road.get(1));
         road.get(1).setSource(s1);
         Source s2 = createSource(4, 4, road.get(4));
