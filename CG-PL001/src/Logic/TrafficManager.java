@@ -22,8 +22,7 @@ public class TrafficManager {
 
     public ArrayList<Section> processTraffic(ArrayList<Section> inicialRoad) {
         ArrayList<Section> finalRoad = new ArrayList(inicialRoad.size());
-        finalRoad.add(0, new Section(true, false));
-        finalRoad.add(inicialRoad.size() - 1, new Section(true, false));
+        finalRoad.add(new Section(true, false));
         for (int i = 1; i < inicialRoad.size() - 1; i++) {
             int lineIndex = (inicialRoad.get(i - 1).getLeftSide() == null ? 0 : 1) * 4
                     + (inicialRoad.get(i).getLeftSide() == null ? 0 : 1) * 2
@@ -74,6 +73,7 @@ public class TrafficManager {
                     break;
             }
         }
+        finalRoad.add(new Section(true, false));
         return finalRoad;
     }
 

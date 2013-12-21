@@ -1,6 +1,8 @@
 package OpenGL;
 
+import Logic.Section;
 import Logic.Simulator;
+import Logic.Source;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -118,6 +120,15 @@ public class StaticListener
         textDisplay.addLineDlString(String.format("Center:  ( %5.1f , %5.1f , %5.1f )", this.center[0], this.center[1], this.center[2]));
         textDisplay.addLineDlString(String.format("    Up:  ( %5.1f , %5.1f , %5.1f )", this.up[0], this.up[1], this.up[2]));
         textDisplay.addLineDlString(String.format("View angle:  ( %5.1f º)", Math.toDegrees(getViewAngle())));
+        textDisplay.clearUrString();
+        if (simulator.hadSelection()) {
+            Section section = simulator.getSelectedSection();
+            textDisplay.addLineUrString(String.format("Angle:  ( %5.1f º)", section.getAngle()));
+            Source source = section.getSource();
+            textDisplay.addLineUrString(source != null ? "Period : " + source.getPeriod() : "No source");
+        } else {
+            textDisplay.addLineUrString("No selection!");
+        }
     }
 
     public float getViewAngle() {

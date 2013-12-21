@@ -104,8 +104,9 @@ public class Simulator {
 
     public void toogleAnimation() {
         animationRunning = !animationRunning;
-        if (animationRunning)
+        if (animationRunning) {
             removeSelection();
+        }
     }
 
     public boolean isAnimationRunning() {
@@ -127,37 +128,31 @@ public class Simulator {
     public void selectLeft() {
         if (selectedSection == null) {
             selectedSection = road.get(1);
-            selectedSection.setSelected(true);
         } else {
-            for (int i = 0; i < road.size(); i++) {
-                if (road.get(i) == selectedSection) {
-                    selectedSection.setSelected(false);
-                    selectedSection = road.get(i+1);
-                    if (selectedSection.isAuxiliar())                        
-                        selectedSection = road.get(1);
-                    selectedSection.setSelected(true);
-                    break;
-                }
+            selectedSection.setSelected(false);
+            int index = road.indexOf(selectedSection);
+            if (index < road.size() - 1) {
+                selectedSection = road.get(index + 1);
+            } else {
+                selectedSection = road.get(1);
             }
         }
+        selectedSection.setSelected(true);
     }
 
     public void selectRight() {
         if (selectedSection == null) {
             selectedSection = road.get(road.size() - 2);
-            selectedSection.setSelected(true);
         } else {
-            for (int i = 0; i < road.size(); i++) {
-                if (road.get(i) == selectedSection) {
-                    selectedSection.setSelected(false);
-                    selectedSection = road.get(i-1);
-                    if (selectedSection.isAuxiliar())                        
-                        selectedSection = road.get(road.size() - 2);
-                    selectedSection.setSelected(true);
-                    break;
-                }
+            selectedSection.setSelected(false);
+            int index = road.indexOf(selectedSection);
+            if (index > 1) {
+                selectedSection = road.get(index - 1);
+            } else {
+                selectedSection = road.get(road.size() - 2);
             }
         }
+        selectedSection.setSelected(true);
     }
 
     public void removeSelection() {

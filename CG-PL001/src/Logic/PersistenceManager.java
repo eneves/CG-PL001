@@ -60,7 +60,7 @@ public class PersistenceManager {
         float z = 0;
         float angle = 0;
         for (int i = 0; i < segmentsNumber + 2; i++) {
-            Section section = new Section(i == 0 || i == road.size() - 1, i == 1);
+            Section section = new Section(i == 0 || i == segmentsNumber + 1, i == 1);
             if (!section.isAuxiliar()) {
                 if (angle < 90) {
                     angle += 20;

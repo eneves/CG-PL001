@@ -33,8 +33,7 @@ public class AppListener
     }
 
     private void keyTypedInEdition(char chars) {
-        switch (chars) {
-            /*
+        switch (chars) {            
             case 'm': //passa para o segmento seguinte
 
                 System.out.println("m pressionada!");
