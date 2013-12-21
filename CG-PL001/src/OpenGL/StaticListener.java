@@ -1,8 +1,6 @@
 package OpenGL;
 
 import Logic.Simulator;
-import com.jogamp.opengl.util.awt.TextRenderer;
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
@@ -56,7 +54,7 @@ public class StaticListener
     protected final GLCanvas canvas;
 
     protected final Simulator simulator;
-    private TextRenderer renderer;
+    private TextDisplayer textDisplay;
 
     StaticListener(GLCanvas canvas, Simulator simulator) {
         this.canvas = canvas;
@@ -74,8 +72,11 @@ public class StaticListener
         gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // best perspective correction
         gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting
 
-        renderer = new TextRenderer(new Font("SansSerif", Font.BOLD, 36));
-        
+        textDisplay = new TextDisplayer();
+        textDisplay.addLineUrString("this is a new line");
+        textDisplay.addLineDlString("this is a new line");
+        textDisplay.addLineDrString("this is a new line");
+
         System.out.println("GLEventListener.init(GLAutoDrawable)");
     }
 
@@ -97,14 +98,21 @@ public class StaticListener
                 this.up[0], this.up[1], this.up[2]
         );
         simulator.render(gl);
-        
-        renderer.beginRendering(drawable.getWidth(), drawable.getHeight());
-        // optionally set the color
-        renderer.setColor(1.0f, 0.2f, 0.2f, 0.8f);
-        renderer.draw("Text to draw", 100, 10);
-        // ... more draw commands, color changes, etc.
-        renderer.endRendering();
-        
+        updateText();
+        textDisplay.render(drawable.getWidth(), drawable.getHeight());
+    }
+
+    private void updateText() {
+        textDisplay.clearUlString();
+        textDisplay.addLineUlString(simulator.isIsEditorMode() ? "Editor" : "Simulator");
+        textDisplay.clearDlString();
+        textDisplay.addLineDlString(this.perspectiveProjection ? "Perspective" : "Parallel");
+        textDisplay.addLineDlString(String.format("Left Right: %5.1f .. %5.1f", this.left, this.right));
+        textDisplay.addLineDlString(String.format("Top Bottom: %5.1f .. %5.1f", this.top, this.bottom));
+        textDisplay.addLineDlString(String.format("  Near Far: %5.1f .. %5.1f", this.near, this.far));
+        textDisplay.addLineDlString(String.format("   Eye:  ( %5.1f , %5.1f , %5.1f )", this.eye[0], this.eye[1], this.eye[2]));
+        textDisplay.addLineDlString(String.format("Center:  ( %5.1f , %5.1f , %5.1f )", this.center[0], this.center[1], this.center[2]));
+        textDisplay.addLineDlString(String.format("    Up:  ( %5.1f , %5.1f , %5.1f )", this.up[0], this.up[1], this.up[2]));
     }
 
     @Override
