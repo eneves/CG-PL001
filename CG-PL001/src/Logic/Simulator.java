@@ -45,18 +45,6 @@ public class Simulator {
         this.road = road;
     }
 
-    public int getActualSection() {
-        return actualSection;
-    }
-
-    public void increaseActualSection() {
-        this.actualSection ++;
-    }
-    
-      public void decreaseActualSection() {
-        this.actualSection --;
-    }  
-
     public ArrayList<Source> getSources() {
         return sources;
     }

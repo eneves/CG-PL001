@@ -20,38 +20,38 @@ public class TrafficManager {
         createTables();
     }
 
-    public Section[] processTraffic(Section[] inicialRoad) {
-        Section[] finalRoad = new Section[inicialRoad.length];
-        finalRoad[0] = new Section(true, false);
-        finalRoad[inicialRoad.length - 1] = new Section(true, false);
-        for (int i = 1; i < inicialRoad.length - 1; i++) {
-            int lineIndex = (inicialRoad[i - 1].getLeftSide() == null ? 0 : 1) * 4
-                    + (inicialRoad[i].getLeftSide() == null ? 0 : 1) * 2
-                    + (inicialRoad[i + 1].getLeftSide() == null ? 0 : 1) * 1;
-            int columnIndex = (inicialRoad[i - 1].getRightSide() == null ? 0 : 1) * 4
-                    + (inicialRoad[i].getRightSide() == null ? 0 : 1) * 2
-                    + (inicialRoad[i + 1].getRightSide() == null ? 0 : 1) * 1;
+    public ArrayList<Section> processTraffic(ArrayList<Section> inicialRoad) {
+        ArrayList<Section> finalRoad = new ArrayList(inicialRoad.size());
+        finalRoad.add(0, new Section(true, false));
+        finalRoad.add(inicialRoad.size() - 1, new Section(true, false));
+        for (int i = 1; i < inicialRoad.size() - 1; i++) {
+            int lineIndex = (inicialRoad.get(i - 1).getLeftSide() == null ? 0 : 1) * 4
+                    + (inicialRoad.get(i).getLeftSide() == null ? 0 : 1) * 2
+                    + (inicialRoad.get(i + 1).getLeftSide() == null ? 0 : 1) * 1;
+            int columnIndex = (inicialRoad.get(i - 1).getRightSide() == null ? 0 : 1) * 4
+                    + (inicialRoad.get(i).getRightSide() == null ? 0 : 1) * 2
+                    + (inicialRoad.get(i + 1).getRightSide() == null ? 0 : 1) * 1;
             Section section = new Section(false, i == 1);
-            section.setAngle(inicialRoad[i].getAngle());
-            section.setOriginX(inicialRoad[i].getOriginX());
-            section.setOriginY(inicialRoad[i].getOriginY());
-            section.setOriginZ(inicialRoad[i].getOriginZ());
-            section.setSource(inicialRoad[i].getSource());
-            finalRoad[i] = section;
+            section.setAngle(inicialRoad.get(i).getAngle());
+            section.setOriginX(inicialRoad.get(i).getOriginX());
+            section.setOriginY(inicialRoad.get(i).getOriginY());
+            section.setOriginZ(inicialRoad.get(i).getOriginZ());
+            section.setSource(inicialRoad.get(i).getSource());
+            finalRoad.add(i, section);
             Car car;
             switch (rigthSide[lineIndex][columnIndex]) {
                 case emptyZone:
                     break;
                 case carNotMove:
-                    section.setRightSide(inicialRoad[i].getRightSide());
+                    section.setRightSide(inicialRoad.get(i).getRightSide());
                     break;
                 case carFromBehind:
-                    car = inicialRoad[i - 1].getRightSide();
+                    car = inicialRoad.get(i - 1).getRightSide();
                     car.setOriginZ(car.getOriginZ() + 10);
                     section.setRightSide(car);
                     break;
                 case carFromSide:
-                    car = inicialRoad[i].getLeftSide();
+                    car = inicialRoad.get(i).getLeftSide();
                     car.setOriginX(car.getOriginX() - 3.5f);
                     section.setRightSide(car);
                     break;
@@ -60,15 +60,15 @@ public class TrafficManager {
                 case emptyZone:
                     break;
                 case carNotMove:
-                    section.setLeftSide(inicialRoad[i].getLeftSide());
+                    section.setLeftSide(inicialRoad.get(i).getLeftSide());
                     break;
                 case carFromBehind:
-                    car = inicialRoad[i - 1].getLeftSide();
+                    car = inicialRoad.get(i - 1).getLeftSide();
                     car.setOriginZ(car.getOriginZ() + 10);
                     section.setLeftSide(car);
                     break;
                 case carFromSide:
-                    car = inicialRoad[i].getRightSide();
+                    car = inicialRoad.get(i).getRightSide();
                     car.setOriginX(car.getOriginX() + 3.5f);
                     section.setLeftSide(car);
                     break;
@@ -77,7 +77,7 @@ public class TrafficManager {
         return finalRoad;
     }
 
-    public void processSources(ArrayList<Source> sources, Section[] road) {
+    public void processSources(ArrayList<Source> sources, ArrayList<Section> road) {
         for (Section section : road) {
             Source currSource = section.getSource();
             if (currSource != null && currSource.isOn()) {
