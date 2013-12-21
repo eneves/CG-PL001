@@ -33,7 +33,7 @@ public class AppListener
     }
 
     private void keyTypedInEdition(char chars) {
-        switch (chars) {            
+        switch (chars) {
             case 'm': //passa para o segmento seguinte
 
                 System.out.println("m pressionada!");
@@ -78,12 +78,18 @@ public class AppListener
                 this.center[2] += 0.1f * Math.sin(viewAngle);
                 break;
             case 'e':
-                //viewAngle +=0.17;
-                this.center[0] += (float) (distanceEyeToCenter() * Math.sin(0.17));
-                this.center[2] -= (float) (distanceEyeToCenter() * Math.sin(0.17));
+                this.center[0] = eye[0] + (float) (distanceEyeToCenter() * Math.cos(viewAngle + 0.17));
+                this.center[2] = eye[2] + (float) (distanceEyeToCenter() * Math.sin(viewAngle + 0.17));
+                break;
+            case 'q':
+                this.center[0] = eye[0] + (float) (distanceEyeToCenter() * Math.cos(viewAngle - 0.17));
+                this.center[2] = eye[2] + (float) (distanceEyeToCenter() * Math.sin(viewAngle - 0.17));
                 break;
             case ' ':
                 this.simulator.setIsEditorMode(true);
+                if (this.simulator.isAnimationRunning()) {
+                    this.simulator.toogleAnimation();
+                }
                 break;
             case 'p':
                 toogleAnimation();
@@ -106,12 +112,6 @@ public class AppListener
                 break;
             case 'x':
                 this.eye[1] += 0.1f;
-                break;
-            case 'q':
-                double h = Math.sqrt(Math.pow(this.center[0], 2) + Math.pow(this.center[2], 2));
-                double angle = Math.asin(this.center[0] / h);
-                this.center[0] = (float) (h * Math.sin(angle + 0.17));
-                this.center[2] = (float) (h * Math.cos(angle + 0.17));
                 break;
             case 'r':
                 this.eye[1] += 0.1f;

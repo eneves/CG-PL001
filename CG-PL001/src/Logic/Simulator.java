@@ -131,7 +131,7 @@ public class Simulator {
         } else {
             selectedSection.setSelected(false);
             int index = road.indexOf(selectedSection);
-            if (index < road.size() - 1) {
+            if (index < road.size() - 2) {
                 selectedSection = road.get(index + 1);
             } else {
                 selectedSection = road.get(1);
