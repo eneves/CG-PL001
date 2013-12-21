@@ -24,19 +24,24 @@ public class PersistenceManager {
             String str;
             int sourcePos = 1;
             String[] vecStr;
+            ArrayList<Source> sources = new ArrayList();
             while ((str = in.readLine()) != null) {
                 vecStr = str.split(" ");
                 int isSource = Integer.parseInt(vecStr[1]);
                 if (isSource != -1) {
-
+                    Source s = createSource(sourcePos, isSource, road[sourcePos]);
+                    sources.add(s);
                 }
-
+                sourcePos++;
             }
+            Simulator simulator = new Simulator(isEditorMode);
+            simulator.setRoad(road);
+            simulator.setSources(sources);
 
         } catch (Exception e) {
             return loadDefaults(isEditorMode);
         }
-        return loadDefaults(isEditorMode);
+        return simulator;
     }
 
     private static Section[] createRoad(int segmentsNumber) {
