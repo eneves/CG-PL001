@@ -61,7 +61,8 @@ public class Source {
         this.originZ = originZ;
     }
 
-    public Source(int position, int period, Section origin) {
+
+    public Source(int position, int period) {
         this.period = period;
         //this.origin = origin;
         this.position = position;
