@@ -54,13 +54,13 @@ public class PersistenceManager {
     }
 
     private static ArrayList<Section> createRoad(int segmentsNumber) {
-        ArrayList<Section> road = new ArrayList(segmentsNumber + 2);
+        ArrayList<Section> road = new ArrayList();
         float x = 0;
         float y = 0;
         float z = 0;
         float angle = 0;
-        for (int i = 0; i < road.size(); i++) {
-            Section section = new Section(i == 0 || i == road.size() - 1, i == 0);
+        for (int i = 0; i < segmentsNumber + 2; i++) {
+            Section section = new Section(i == 0 || i == road.size() - 1, i == 1);
             if (!section.isAuxiliar()) {
                 if (angle < 90) {
                     angle += 20;

@@ -34,6 +34,7 @@ public class AppListener
 
     private void keyTypedInEdition(char chars) {
         switch (chars) {
+            /*
             case 'm': //passa para o segmento seguinte
                 if (this.simulator.getActualSection() <= this.simulator.getRoad().size() - 1) {
                     this.simulator.increaseActualSection();
@@ -64,6 +65,7 @@ public class AppListener
                 }
                 System.out.println("n pressionada!");
                 break;
+            */
             case 'ç'://grava um ficheiro com a configuração actual
                 PersistenceManager.saveSimulator();
                 System.out.println("Edição actual gravada no ficheiro de texto");
