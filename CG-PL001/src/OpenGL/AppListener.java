@@ -19,11 +19,11 @@ import javax.media.opengl.awt.GLCanvas;
  */
 public class AppListener
         extends StaticListener {
-    
+
     public AppListener(GLCanvas canvas, Simulator simulator) {
         super(canvas, simulator);
     }
-    
+
     @Override
     public void keyTyped(KeyEvent ke) {
         if (this.simulator.isIsEditorMode()) {
@@ -33,7 +33,7 @@ public class AppListener
         }
         this.canvas.display();
     }
-    
+
     private void keyTypedInEdition(char chars) {
         switch (chars) {
             case 'm': //adiciona segmento antes
@@ -66,7 +66,6 @@ public class AppListener
                     }
                     this.simulator.setRoad(newRoad);
                 }
-                System.out.println("m pressionada!");
                 break;
             case 'n': //adiciona segmento depois
                 if (this.simulator.hadSelection()) {
@@ -76,29 +75,26 @@ public class AppListener
                     int i = 0;
                     float z = 10;
                     for (Section s : road) {
-                        if (s.isAuxiliar()) {
-                            s.setOriginZ(0);
-                        } else {
+                        if (!s.isAuxiliar()) {
                             s.setOriginZ(z * i);
                             if (s.hasSource()) {
                                 s.getSource().setOriginZ(s.getOriginZ());
                             }
                         }
-                        newRoad.add(i, s);
-                         if (i == index) {
-                            Section newSection = new Section(false, i == 1);
+                        newRoad.add(s);
+                        if (i == index) {
+                            Section newSection = new Section(false, i+1 == 1);
                             newSection.setOriginX(0);
                             newSection.setOriginY(0);
-                            newSection.setOriginZ(z * i);
+                            newSection.setOriginZ(z * (i+1));
                             newSection.setAngle(s.getAngle());
-                            newRoad.add(i, newSection);
+                            newRoad.add(newSection);
                             i++;
                         }
                         i++;
                     }
                     this.simulator.setRoad(newRoad);
                 }
-                System.out.println("n pressionada!");
                 break;
             case 'b': //remove segmento
                 if (this.simulator.hadSelection()) {
@@ -175,9 +171,9 @@ public class AppListener
                 break;
         }
     }
-    
+
     private void keyTypedInSimulation(char chars) {
-        
+
         float viewAngle = getViewAngle();
         switch (chars) {
             case 'a':
@@ -255,7 +251,7 @@ public class AppListener
                 break;
         }
     }
-    
+
     @Override
     public void keyPressed(KeyEvent ke) {
         /*if (simulator.isIsEditorMode()) {
@@ -276,14 +272,14 @@ public class AppListener
         }
         this.canvas.display();
     }
-    
+
     @Override
     public void mouseClicked(MouseEvent me) {
         System.out.println("mouse clicked!");
         //System.out.println(me.getX()); //To change body of generated methods, choose Tools | Templates.
         //System.out.println(me.getXOnScreen()); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     public void toogleAnimation() {
         if (simulator.isAnimationRunning()) {
             simulator.toogleAnimation();
@@ -291,12 +287,12 @@ public class AppListener
             simulator.toogleAnimation();
             AnimationThread animation = new AnimationThread();
             new Thread(animation).start();
-            
+
         }
     }
-    
+
     class AnimationThread implements Runnable {
-        
+
         @Override
         public void run() {
             while (simulator.isAnimationRunning()) {
