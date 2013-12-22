@@ -80,6 +80,10 @@ public class Section {
         color[2] = 1.0f;
         this.selected = false;
     }
+    
+    public void setIsFirst(boolean isFirst){
+        this.isFirst = isFirst;
+    }
 
     public boolean isSelected() {
         return selected;
