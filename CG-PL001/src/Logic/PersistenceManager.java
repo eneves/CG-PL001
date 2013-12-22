@@ -10,7 +10,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,11 +21,13 @@ import java.util.ArrayList;
  */
 public class PersistenceManager {
 
-    private static String filename = "highway_data";
+    //private static String filename = "highway_data";
+    private static BufferedReader in;
+    private static BufferedWriter out;
 
     public static Simulator loadSimulator(String filename, boolean isEditorMode) {
         try {
-            BufferedReader in = new BufferedReader(new FileReader(filename));
+            in = new BufferedReader(new FileReader(filename));
             ArrayList<Section> road = new ArrayList();
             int roadLength = Integer.parseInt(in.readLine()) + 2;
             float x = 0;
@@ -46,6 +51,7 @@ public class PersistenceManager {
             }
             Simulator simulator = new Simulator(isEditorMode);
             simulator.setRoad(road);
+            in.close();
             return simulator;
         } catch (Exception e) {
             System.out.println("Foi lido o ficheiro de default!!");
@@ -109,14 +115,33 @@ public class PersistenceManager {
 
     public static void saveSimulator(ArrayList<Section> road) {
         try {
-            BufferedWriter out = new BufferedWriter(new FileWriter(new File("highway_edited")));
+            out = new BufferedWriter(new FileWriter(new File("highway_edited.txt")));
+            StringBuilder sb = new StringBuilder();
+            sb.append(road.size() - 2).append("\n");
+            out.write(sb.toString());
             for (Section s : road) {
-                StringBuilder sb = new StringBuilder();
-                
-                out.write(sb.toString());
+                if (!s.isAuxiliar()) {
+                    sb = new StringBuilder();
+                    sb.append(s.getAngle());//guarda ângulodo segmento
+                    sb.append(" ");
+                    if (s.hasSource()) {
+                        sb.append(s.getSource().getPeriod());//guarda periodo da fonte, se existir
+                    } else {
+                        sb.append(-1);
+                    }
+                    sb.append("\n");
+                    out.write(sb.toString());
+                }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Ocorreu um erro ao gravar o ficheiro!!");
+        }
+        finally{
+            try {
+                out.close();
+            } catch (IOException ex) {
+                System.out.println("Ocorreu um erro ao gravar o ficheiro!!");
+            }
         }
     }
 }
