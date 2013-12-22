@@ -129,7 +129,7 @@ public class AppListener
                 }
                 break;
             case 'l'://grava um ficheiro com a configuração actual
-                PersistenceManager.saveSimulator();
+                PersistenceManager.saveSimulator(this.simulator.getRoad());
                 System.out.println("Edição actual gravada no ficheiro de texto");
                 break;
             case ' ':
