@@ -20,16 +20,15 @@ public class PersistenceManager {
     public static Simulator loadSimulator(String filename, boolean isEditorMode) {
         try {
             BufferedReader in = new BufferedReader(new FileReader(filename));
-            ArrayList<Section> road = new ArrayList(Integer.parseInt(in.readLine()) + 2);
+            ArrayList<Section> road = new ArrayList();
+            int roadLength = Integer.parseInt(in.readLine()) + 2;
             float x = 0;
             float y = 0;
             float z = 0;
-            String str;
             String[] vecStr;
-            int index = 0;
-            while ((str = in.readLine()) != null) {
-                vecStr = str.split(" ");
-                Section section = new Section(index == 0 || index == road.size() - 1, index == 0);
+            for (int i = 0; i < roadLength; i++) {
+                vecStr = in.readLine().split(" ");
+                Section section = new Section(i == 0 || i == roadLength - 1, i == 1);
                 if (!section.isAuxiliar()) {
                     section.setOriginX(x);
                     section.setOriginY(y);
@@ -37,16 +36,14 @@ public class PersistenceManager {
                     z += 10;
                     section.setAngle(Float.parseFloat(vecStr[0]));
                     if (Integer.parseInt(vecStr[1]) != -1) {
-                        section.setSource(createSource(index, Integer.parseInt(vecStr[1]), section));
+                        section.setSource(createSource(i, Integer.parseInt(vecStr[1]), section));
                     }
                 }
-                road.add(index, section);
-                index ++;
+                road.add(i, section);
             }
             Simulator simulator = new Simulator(isEditorMode);
             simulator.setRoad(road);
             return simulator;
-
         } catch (Exception e) {
             System.out.println("Foi lido o ficheiro de default!!");
             return loadDefaults(isEditorMode);
@@ -96,7 +93,6 @@ public class PersistenceManager {
     //Tabela 1: Características da rede de estradas quando é omitido o nome do ficheiro.
     private static Simulator loadDefaults(boolean isEditorMode) {
         ArrayList<Section> road = createRoad(10);
-        System.out.println(road.size());
         Source s1 = createSource(1, 2, road.get(1));
         road.get(1).setSource(s1);
         Source s2 = createSource(4, 4, road.get(4));
