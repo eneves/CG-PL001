@@ -111,13 +111,13 @@ public class AppListener
                     }
                 }
                 break;
-            case 'k': //insere fonte com periodo por default = 1
+            case 'k': //insere fonte com periodo por default = 5
                 if (this.simulator.hadSelection()) {
                     ArrayList<Section> road = this.simulator.getRoad();
                     int index = road.indexOf(this.simulator.getSelectedSection());
                     Section s = this.simulator.getSelectedSection();
                     if (!s.hasSource()) {
-                        Source source = PersistenceManager.createSource(index, 1, s);
+                        Source source = PersistenceManager.createSource(index, 5, s);
                         s.setSource(source);
                     }
                 }

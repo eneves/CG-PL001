@@ -35,13 +35,13 @@ public class PersistenceManager {
             float z = 0;
             String[] vecStr;
             for (int i = 0; i < roadLength; i++) {
-                vecStr = in.readLine().split(" ");
                 Section section = new Section(i == 0 || i == roadLength - 1, i == 1);
                 if (!section.isAuxiliar()) {
                     section.setOriginX(x);
                     section.setOriginY(y);
                     section.setOriginZ(z);
                     z += 10;
+                    vecStr = in.readLine().split(" ");
                     section.setAngle(Float.parseFloat(vecStr[0]));
                     if (Integer.parseInt(vecStr[1]) != -1) {
                         section.setSource(createSource(i, Integer.parseInt(vecStr[1]), section));

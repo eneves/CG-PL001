@@ -26,7 +26,7 @@ public class CGPL001 {
 
     public static void main(String[] args) {
 
-        Simulator simulator = PersistenceManager.loadSimulator("highway_data", true);
+        Simulator simulator = PersistenceManager.loadSimulator("highway_data.txt", true);
 
         startOpenGLWindow(simulator);
     }
