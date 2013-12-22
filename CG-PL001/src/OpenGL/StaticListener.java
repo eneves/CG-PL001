@@ -37,7 +37,7 @@ public class StaticListener
     protected float right = 14;
     protected float top = 12;
     protected float bottom = -1f;
-    protected float far = 100;
+    protected float far = 500;
     protected float near = 1;
     /**
      * Camera coordinates.
