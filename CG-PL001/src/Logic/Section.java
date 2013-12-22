@@ -126,6 +126,19 @@ public class Section {
         return sb.toString();
     }
 
+    public void repositionCars() {
+        if (leftSide != null) {
+            leftSide.setOriginX(originX + 1.75f);
+            leftSide.setOriginY(0);
+            leftSide.setOriginZ(originZ + 2.5f);
+        }
+        if (rightSide != null) {
+            rightSide.setOriginX(originX - 1.75f);
+            rightSide.setOriginY(0);
+            rightSide.setOriginZ(originZ + 2.5f);
+        }
+    }
+
     public void render(GL2 gl) {
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
         gl.glRotatef(angle, 0, 1, 0);

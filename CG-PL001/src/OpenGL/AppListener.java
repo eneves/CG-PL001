@@ -57,6 +57,7 @@ public class AppListener
                             s.setOriginZ(0);
                         } else {
                             s.setOriginZ(z * (i - 1));
+                            s.repositionCars();
                             if (s.hasSource()) {
                                 s.getSource().setOriginZ(s.getOriginZ());
                             }
@@ -78,6 +79,7 @@ public class AppListener
                     for (Section s : road) {
                         if (!s.isAuxiliar()) {
                             s.setOriginZ(z * (i - 1));
+                            s.repositionCars();
                             if (s.hasSource()) {
                                 s.getSource().setOriginZ(s.getOriginZ());
                             }
@@ -107,6 +109,7 @@ public class AppListener
                     for (int i = index; i < road.size() - 1; i++) {
                         road.get(i).setOriginZ(10 * (i - 1));
                         road.get(i).setFirst(i == 1);
+                        road.get(i).repositionCars();
                         if (road.get(i).hasSource()) {
                             road.get(i).getSource().setOriginZ(road.get(i).getOriginZ());
                         }
