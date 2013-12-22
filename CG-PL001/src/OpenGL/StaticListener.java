@@ -2,6 +2,7 @@ package OpenGL;
 
 import Logic.Section;
 import Logic.Simulator;
+import Logic.Simulator.ViewportSize;
 import Logic.Source;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
@@ -15,6 +16,7 @@ import static javax.media.opengl.GL.GL_NICEST;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLContext;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
@@ -78,8 +80,6 @@ public class StaticListener
         gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting
 
         textDisplay = new TextDisplayer();
-        textDisplay.addLineDlString("this is a new line");
-        textDisplay.addLineDrString("this is a new line");
 
         System.out.println("GLEventListener.init(GLAutoDrawable)");
     }
@@ -111,15 +111,18 @@ public class StaticListener
         textDisplay.addLineUlString(simulator.isIsEditorMode() ? "Editor" : "Simulator");
         textDisplay.addLineUlString(simulator.isAnimationRunning() ? "Running" : "Stopped");
         textDisplay.addLineUlString("T = " + simulator.getCurrentInstant());
+        textDisplay.addLineUlString("Road size = " + (simulator.getRoad().size() - 2));
         textDisplay.clearDlString();
-        textDisplay.addLineDlString(this.perspectiveProjection ? "Perspective" : "Parallel");
-        textDisplay.addLineDlString(String.format("Left Right: %5.1f .. %5.1f", this.left, this.right));
-        textDisplay.addLineDlString(String.format("Top Bottom: %5.1f .. %5.1f", this.top, this.bottom));
-        textDisplay.addLineDlString(String.format("  Near Far: %5.1f .. %5.1f", this.near, this.far));
-        textDisplay.addLineDlString(String.format("   Eye:  ( %5.1f , %5.1f , %5.1f )", this.eye[0], this.eye[1], this.eye[2]));
-        textDisplay.addLineDlString(String.format("Center:  ( %5.1f , %5.1f , %5.1f )", this.center[0], this.center[1], this.center[2]));
-        textDisplay.addLineDlString(String.format("    Up:  ( %5.1f , %5.1f , %5.1f )", this.up[0], this.up[1], this.up[2]));
-        textDisplay.addLineDlString(String.format("View angle:  ( %5.1f º)", Math.toDegrees(getViewAngle())));
+        if (!simulator.isIsEditorMode()) {
+            textDisplay.addLineDlString(this.perspectiveProjection ? "Perspective" : "Parallel");
+            textDisplay.addLineDlString(String.format("Left Right: %5.1f .. %5.1f", this.left, this.right));
+            textDisplay.addLineDlString(String.format("Top Bottom: %5.1f .. %5.1f", this.top, this.bottom));
+            textDisplay.addLineDlString(String.format("  Near Far: %5.1f .. %5.1f", this.near, this.far));
+            textDisplay.addLineDlString(String.format("   Eye:  ( %5.1f , %5.1f , %5.1f )", this.eye[0], this.eye[1], this.eye[2]));
+            textDisplay.addLineDlString(String.format("Center:  ( %5.1f , %5.1f , %5.1f )", this.center[0], this.center[1], this.center[2]));
+            textDisplay.addLineDlString(String.format("    Up:  ( %5.1f , %5.1f , %5.1f )", this.up[0], this.up[1], this.up[2]));
+            textDisplay.addLineDlString(String.format("View angle:  ( %5.1f º)", Math.toDegrees(getViewAngle())));
+        }
         textDisplay.clearUrString();
         if (simulator.hadSelection()) {
             Section section = simulator.getSelectedSection();
@@ -148,15 +151,29 @@ public class StaticListener
         gl.glViewport(0, 0, width, height);
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
-        if (this.perspectiveProjection) {
-            GLU glu = GLU.createGLU(gl);
-            glu.gluPerspective(60, width / height, near, far);
-        } else {
+        if (this.simulator.isIsEditorMode()) {
+            ViewportSize vp = simulator.getViewport();
+            up = new float[]{1, 0, 0};
+            eye = new float[]{0, 200, 0};
+            center = new float[]{0, 150, 0};
+            //System.out.println("Center ->(" + vp.getxCenter() + "," + vp.getzCenter() + ")");
+            //System.out.println("Min ->(" + vp.getxMin() + "," + vp.getzMin() + ")");
+            //System.out.println("Max ->(" + vp.getxMax() + "," + vp.getzMax() + ")");
             gl.glOrtho(
-                    left, right,
-                    bottom, top,
-                    near, far
+                    vp.getzMin(), vp.getzMax(),
+                    vp.getxMin(), vp.getxMax(),
+                    /*vp.getMin(), vp.getMax(),
+                     vp.getMin(), vp.getMax(),*/
+                    1, 1000
             );
+        } else {
+            up = new float[]{0, 1, 0};
+            eye = new float[]{0, 12, -14};
+            center = new float[]{0, 11.5f, -12};
+            GLU glu = GLU.createGLU(gl);
+            GLContext gLContext = drawable.getContext();
+            gLContext.makeCurrent();
+            glu.gluPerspective(60, width / height, near, far);
         }
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();

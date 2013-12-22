@@ -83,10 +83,10 @@ public class AppListener
                         }
                         newRoad.add(s);
                         if (i == index) {
-                            Section newSection = new Section(false, i+1 == 1);
+                            Section newSection = new Section(false, i + 1 == 1);
                             newSection.setOriginX(0);
                             newSection.setOriginY(0);
-                            newSection.setOriginZ(z * (i+1));
+                            newSection.setOriginZ(z * (i + 1));
                             newSection.setAngle(s.getAngle());
                             newRoad.add(newSection);
                             i++;
@@ -97,14 +97,14 @@ public class AppListener
                 }
                 break;
             case 'b': //remove segmento
-                if (this.simulator.hadSelection() && this.simulator.getRoad().size() > 3 ) {
+                if (this.simulator.hadSelection() && this.simulator.getRoad().size() > 3) {
                     ArrayList<Section> road = this.simulator.getRoad();
                     int index = road.indexOf(this.simulator.getSelectedSection());
                     road.remove(index);
                     this.simulator.removeSelection();
-                    for(int i=index; i<road.size()-1; i++){
-                        road.get(i).setOriginZ(10*(i-1));
-                        if(road.get(i).hasSource()){
+                    for (int i = index; i < road.size() - 1; i++) {
+                        road.get(i).setOriginZ(10 * (i - 1));
+                        if (road.get(i).hasSource()) {
                             road.get(i).getSource().setOriginZ(road.get(i).getOriginZ());
                         }
                     }
@@ -162,7 +162,8 @@ public class AppListener
                 System.out.println("Edição actual gravada no ficheiro de texto");
                 break;
             case ' ':
-                this.simulator.setIsEditorMode(false);
+                this.simulator.setIsEditorMode(false); 
+                this.reshape(this.canvas, 0, 0, this.canvas.getWidth(), this.canvas.getHeight());
                 break;
         }
     }
@@ -215,6 +216,7 @@ public class AppListener
                 break;
             case ' ':
                 this.simulator.setIsEditorMode(true);
+                this.reshape(this.canvas, 0, 0, this.canvas.getWidth(), this.canvas.getHeight());
                 if (this.simulator.isAnimationRunning()) {
                     this.simulator.toogleAnimation();
                 }

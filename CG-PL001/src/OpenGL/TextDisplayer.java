@@ -36,11 +36,9 @@ public class TextDisplayer {
         DownerLeft = new TextRenderer(new Font("SansSerif", Font.BOLD, FONT_SIZE));
         DownerLeft.setColor(Color.green);
         dlString = new ArrayList<>();
-        dlString.add("DownerLeft");
         DownerRight = new TextRenderer(new Font("SansSerif", Font.BOLD, FONT_SIZE));
         DownerRight.setColor(Color.orange);
         drString = new ArrayList<>();
-        drString.add("DownerRight");
     }
 
     public void render(int width, int height) {
@@ -76,7 +74,7 @@ public class TextDisplayer {
         //upperLeft.setColor(1.0f, 0.2f, 0.2f, 0.8f);
 
         for (int i = 0; i < drString.size(); i++) {
-            DownerRight.draw(drString.get(i), width - 200,(FONT_SIZE + 5) * (drString.size() - i));
+            DownerRight.draw(drString.get(i), width - 200, (FONT_SIZE + 5) * (drString.size() - i));
         }
         // ... more draw commands, color changes, etc.
         DownerRight.endRendering();
@@ -85,25 +83,32 @@ public class TextDisplayer {
     public void addLineUlString(String string) {
         ulString.add(string);
     }
+
     public void addLineUrString(String string) {
         urString.add(string);
     }
+
     public void addLineDlString(String string) {
         dlString.add(string);
     }
+
     public void addLineDrString(String string) {
         drString.add(string);
     }
-    public void clearUlString(){
+
+    public void clearUlString() {
         ulString.clear();
     }
-    public void clearUrString(){
+
+    public void clearUrString() {
         urString.clear();
     }
-    public void clearDlString(){
+
+    public void clearDlString() {
         dlString.clear();
     }
-    public void clearDrString(){
+
+    public void clearDrString() {
         drString.clear();
     }
 }

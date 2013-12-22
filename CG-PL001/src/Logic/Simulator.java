@@ -165,4 +165,73 @@ public class Simulator {
     public boolean hadSelection() {
         return selectedSection != null;
     }
+
+    public ViewportSize getViewport() {
+        ViewportSize result = new ViewportSize();
+        result.xMax += 10 * road.size() - 2;
+        result.xMin -= 10 * road.size() - 2;
+        result.zMax += 10 * road.size() - 2;
+        result.zMin -= 10 * road.size() - 2;
+        return result;
+    }
+
+    public class ViewportSize {
+
+        private float xMax;
+        private float xMin;
+        private float zMax;
+        private float zMin;
+
+        public ViewportSize() {
+            xMax = 0;
+            xMin = 0;
+            zMax = 0;
+            zMin = 0;
+        }
+
+        public float getxMax() {
+            return xMax;
+        }
+
+        public float getxMin() {
+            return xMin;
+        }
+
+        public float getzMax() {
+            return zMax;
+        }
+
+        public float getzMin() {
+            return zMin;
+        }
+
+        public float getxCenter() {
+            return (xMax - xMin) / 2;
+        }
+
+        public float getzCenter() {
+            return (zMax - zMin) / 2;
+        }
+
+        public float getCenter() {
+            return (getMax() - getMin()) / 2;
+        }
+
+        public float getMin() {
+            if (xMin < zMin) {
+                return xMin;
+            } else {
+                return zMin;
+            }
+        }
+
+        public float getMax() {
+            if (xMax > zMax) {
+                return xMax;
+            } else {
+                return zMax;
+            }
+        }
+
+    }
 }
