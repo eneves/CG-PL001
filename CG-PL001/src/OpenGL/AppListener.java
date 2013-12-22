@@ -4,7 +4,6 @@ import Logic.PersistenceManager;
 import Logic.Section;
 import Logic.Simulator;
 import Logic.Source;
-import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +30,7 @@ public class AppListener
         } else {
             keyTypedInSimulation(ke.getKeyChar());
         }
-        this.canvas.display();
+        canvas.display();
     }
 
     private void keyTypedInEdition(char chars) {
@@ -48,24 +47,25 @@ public class AppListener
                             Section newSection = new Section(false, i == 1);
                             newSection.setOriginX(0);
                             newSection.setOriginY(0);
-                            newSection.setOriginZ(z * i);
+                            newSection.setOriginZ(z * (i - 1));
                             newSection.setAngle(s.getAngle());
-                            newRoad.add(i, newSection);
-                            s.setIsFirst(false);
+                            newRoad.add(newSection);
+                            s.setFirst(false);
                             i++;
                         }
                         if (s.isAuxiliar()) {
                             s.setOriginZ(0);
                         } else {
-                            s.setOriginZ(z * i);
+                            s.setOriginZ(z * (i - 1));
                             if (s.hasSource()) {
                                 s.getSource().setOriginZ(s.getOriginZ());
                             }
                         }
-                        newRoad.add(i, s);
+                        newRoad.add(s);
                         i++;
                     }
                     this.simulator.setRoad(newRoad);
+                    canvas.reshape(0, 0, 1024, 768);
                 }
                 break;
             case 'n': //adiciona segmento depois
@@ -77,7 +77,7 @@ public class AppListener
                     float z = 10;
                     for (Section s : road) {
                         if (!s.isAuxiliar()) {
-                            s.setOriginZ(z * i);
+                            s.setOriginZ(z * (i - 1));
                             if (s.hasSource()) {
                                 s.getSource().setOriginZ(s.getOriginZ());
                             }
@@ -87,7 +87,7 @@ public class AppListener
                             Section newSection = new Section(false, i + 1 == 1);
                             newSection.setOriginX(0);
                             newSection.setOriginY(0);
-                            newSection.setOriginZ(z * (i + 1));
+                            newSection.setOriginZ(z * i);
                             newSection.setAngle(s.getAngle());
                             newRoad.add(newSection);
                             i++;
@@ -95,6 +95,7 @@ public class AppListener
                         i++;
                     }
                     this.simulator.setRoad(newRoad);
+                    canvas.reshape(0, 0, 1024, 768);
                 }
                 break;
             case 'b': //remove segmento
@@ -105,10 +106,12 @@ public class AppListener
                     this.simulator.removeSelection();
                     for (int i = index; i < road.size() - 1; i++) {
                         road.get(i).setOriginZ(10 * (i - 1));
+                        road.get(i).setFirst(i == 1);
                         if (road.get(i).hasSource()) {
                             road.get(i).getSource().setOriginZ(road.get(i).getOriginZ());
                         }
                     }
+                    canvas.reshape(0, 0, 1024, 768);
                 }
                 break;
             case 'k': //insere fonte com periodo por default = 5
@@ -117,7 +120,7 @@ public class AppListener
                     int index = road.indexOf(this.simulator.getSelectedSection());
                     Section s = this.simulator.getSelectedSection();
                     if (!s.hasSource()) {
-                        Source source = PersistenceManager.createSource(index, 5, s);
+                        Source source = PersistenceManager.createSource(5, s);
                         s.setSource(source);
                     }
                 }
@@ -147,7 +150,7 @@ public class AppListener
                 }
                 break;
             case 'i': //aumentar ângulo enquanto for menor que 45º
-                if (this.simulator.hadSelection() && this.simulator.getSelectedSection().getAngle() < 45 ) {
+                if (this.simulator.hadSelection() && this.simulator.getSelectedSection().getAngle() < 45) {
                     Section s = this.simulator.getSelectedSection();
                     this.simulator.getSelectedSection().setAngle((float) (s.getAngle() + 1));
                 }
@@ -163,8 +166,8 @@ public class AppListener
                 System.out.println("Edição actual gravada no ficheiro de texto");
                 break;
             case ' ':
-                this.simulator.setIsEditorMode(false); 
-                this.reshape(this.canvas, 0, 0, this.canvas.getWidth(), this.canvas.getHeight());
+                this.simulator.setIsEditorMode(false);
+                canvas.reshape(0, 0, 1024, 768);
                 break;
         }
     }
@@ -217,7 +220,7 @@ public class AppListener
                 break;
             case ' ':
                 this.simulator.setIsEditorMode(true);
-                this.reshape(this.canvas, 0, 0, this.canvas.getWidth(), this.canvas.getHeight());
+                canvas.reshape(0, 0, 1024, 768);
                 if (this.simulator.isAnimationRunning()) {
                     this.simulator.toogleAnimation();
                 }
@@ -269,13 +272,6 @@ public class AppListener
                 break;
         }
         this.canvas.display();
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent me) {
-        System.out.println("mouse clicked!");
-        //System.out.println(me.getX()); //To change body of generated methods, choose Tools | Templates.
-        //System.out.println(me.getXOnScreen()); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void toogleAnimation() {

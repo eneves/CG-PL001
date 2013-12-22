@@ -14,7 +14,6 @@ import static javax.media.opengl.GL2GL3.GL_QUADS;
  */
 public class Car {
 
-    private Section destination;
     private float originX;
     private float originY;
     private float originZ;

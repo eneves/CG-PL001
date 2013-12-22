@@ -17,14 +17,14 @@ public class Section {
 
     private Car rightSide;
     private Car leftSide;
-    private boolean isAuxiliar;
+    private boolean auxiliar;
     private float originX;
     private float originY;
     private float originZ;
     private float[] color;
     private float angle;
     private Source source;
-    private boolean isFirst;
+    private boolean first;
     private boolean selected;
 
     public Source getSource() {
@@ -34,9 +34,9 @@ public class Section {
     public void setSource(Source source) {
         this.source = source;
     }
-    
-    public boolean hasSource(){
-        return this.source!= null;
+
+    public boolean hasSource() {
+        return this.source != null;
     }
 
     public float getAngle() {
@@ -72,17 +72,17 @@ public class Section {
     }
 
     public Section(boolean isAuxiliar, boolean isFirst) {
-        this.isAuxiliar = isAuxiliar;
-        this.isFirst = isFirst;
+        this.auxiliar = isAuxiliar;
+        this.first = isFirst;
         color = new float[3];
         color[0] = 1.0f;
         color[1] = 1.0f;
         color[2] = 1.0f;
         this.selected = false;
     }
-    
-    public void setIsFirst(boolean isFirst){
-        this.isFirst = isFirst;
+
+    public void setFirst(boolean first) {
+        this.first = first;
     }
 
     public boolean isSelected() {
@@ -94,7 +94,7 @@ public class Section {
     }
 
     public boolean isAuxiliar() {
-        return isAuxiliar;
+        return auxiliar;
     }
 
     public Car getRightSide() {
@@ -116,7 +116,7 @@ public class Section {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (isAuxiliar) {
+        if (auxiliar) {
             sb.append("| A : A |");
         } else {
             sb.append("| ").append(leftSide == null ? " " : "*").append(" : ");
@@ -181,7 +181,7 @@ public class Section {
         float beta;
         float deltaZ = 0;
         float deltaX = 0;
-        if (!isFirst && angle < 0) {
+        if (!first && angle < 0) {
             b = (float) (7 * Math.sin((angle * Math.PI) / (2 * 180)));
             beta = (float) (((90 - ((180 - angle) / 2)) * Math.PI) / 180);
             deltaZ = (float) (b * Math.cos(beta));
@@ -191,7 +191,7 @@ public class Section {
             gl.glVertex3f(3.5f, -0.3f, 0.0f);
             gl.glVertex3f(3.5f - deltaX, -0.3f, deltaZ);
 
-        } else if (!isFirst && angle > 0) {
+        } else if (!first && angle > 0) {
             b = (float) (7 * Math.sin((angle * Math.PI) / (2 * 180)));
             beta = (float) (((90 - ((180 - angle) / 2)) * Math.PI) / 180);
             deltaZ = (float) (b * Math.cos(beta));
@@ -206,7 +206,7 @@ public class Section {
         gl.glEnd();
 
         gl.glBegin(GL.GL_TRIANGLES); // of the color cube
-        if (!isFirst && angle < 0) {
+        if (!first && angle < 0) {
             gl.glVertex3f(0.0f, 0.0f, 0.0f);
             gl.glVertex3f(3.5f, 0.0f, 0.0f);
             gl.glVertex3f(3.5f - deltaX, 0.0f, deltaZ);
@@ -214,7 +214,7 @@ public class Section {
             gl.glVertex3f(0.0f, -0.3f, 0.0f);
             gl.glVertex3f(3.5f, -0.3f, 0.0f);
             gl.glVertex3f(3.5f - deltaX, -0.3f, deltaZ);
-        } else if (!isFirst && angle > 0) {
+        } else if (!first && angle > 0) {
             gl.glVertex3f(0.0f, 0.0f, 0.0f);
             gl.glVertex3f(-3.5f, 0.0f, 0.0f);
             gl.glVertex3f(-3.5f + deltaX, 0.0f, -deltaZ);

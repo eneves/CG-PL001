@@ -4,10 +4,8 @@ import Logic.Section;
 import Logic.Simulator;
 import Logic.Simulator.ViewportSize;
 import Logic.Source;
-import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
@@ -16,7 +14,6 @@ import static javax.media.opengl.GL.GL_NICEST;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLContext;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
@@ -30,8 +27,7 @@ import javax.media.opengl.glu.GLU;
 public class StaticListener
         implements
         GLEventListener,
-        KeyListener,
-        MouseListener {
+        KeyListener {
 
     /**
      * Use a perspective or a parallel projection.
@@ -171,8 +167,8 @@ public class StaticListener
             eye = new float[]{0, 12, -14};
             center = new float[]{0, 11.5f, -12};
             GLU glu = GLU.createGLU(gl);
-            GLContext gLContext = drawable.getContext();
-            gLContext.makeCurrent();
+            //GLContext gLContext = drawable.getContext();
+            //gLContext.makeCurrent();
             glu.gluPerspective(60, width / height, near, far);
         }
         gl.glMatrixMode(GL2.GL_MODELVIEW);
@@ -203,26 +199,6 @@ public class StaticListener
         System.out.format("   Eye:  ( %5.1f , %5.1f , %5.1f )\n", this.eye[0], this.eye[1], this.eye[2]);
         System.out.format("Center:  ( %5.1f , %5.1f , %5.1f )\n", this.center[0], this.center[1], this.center[2]);
         System.out.format("    Up:  ( %5.1f , %5.1f , %5.1f )\n", this.up[0], this.up[1], this.up[2]);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent me) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent me) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent me) {
     }
 
 }

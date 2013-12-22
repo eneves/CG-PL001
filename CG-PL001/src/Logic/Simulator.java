@@ -20,7 +20,6 @@ public class Simulator {
 
     private TrafficManager trafficManager;
     private ArrayList<Section> road;
-    private ArrayList<Source> sources;
     private boolean editorMode;
     private int currentInstant;
     private boolean animationRunning;
@@ -45,48 +44,13 @@ public class Simulator {
         this.road = road;
     }
 
-    public ArrayList<Source> getSources() {
-        return sources;
-    }
-
-    public void setSources(ArrayList<Source> sources) {
-        this.sources = sources;
-    }
-
     public boolean isIsEditorMode() {
         return editorMode;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder("Mode : ");
-        sb.append(editorMode ? "Editor" : "Simulator").append("\n");
-        sb.append("Sources:\n");
-        for (Source s : sources) {
-            sb.append(s.toString()).append("\n");
-        }
-        sb.append("Current road status (t=").append(currentInstant).append(") :\n");
-        //int index = 0;
-        for (int i = road.size() - 1; i >= 0; i--) {
-            Section s = road.get(i);
-            sb.append(s.toString()).append(" ").append(haveSource(i) ? "I" : "O");
-            sb.append(" -> (").append(i).append(")\n");
-        }
-        return sb.toString();
-    }
-
-    private boolean haveSource(int index) {
-        for (Source source : sources) {
-            if (source.getPosition() == index) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void incrementInstant() {
         road = trafficManager.processTraffic(road);
-        trafficManager.processSources(sources, road);
+        trafficManager.processSources(road);
         currentInstant++;
     }
 
@@ -204,34 +168,5 @@ public class Simulator {
         public float getzMin() {
             return zMin;
         }
-
-        public float getxCenter() {
-            return (xMax - xMin) / 2;
-        }
-
-        public float getzCenter() {
-            return (zMax - zMin) / 2;
-        }
-
-        public float getCenter() {
-            return (getMax() - getMin()) / 2;
-        }
-
-        public float getMin() {
-            if (xMin < zMin) {
-                return xMin;
-            } else {
-                return zMin;
-            }
-        }
-
-        public float getMax() {
-            if (xMax > zMax) {
-                return xMax;
-            } else {
-                return zMax;
-            }
-        }
-
     }
 }

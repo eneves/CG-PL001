@@ -77,7 +77,7 @@ public class TrafficManager {
         return finalRoad;
     }
 
-    public void processSources(ArrayList<Source> sources, ArrayList<Section> road) {
+    public void processSources(ArrayList<Section> road) {
         for (Section section : road) {
             Source currSource = section.getSource();
             if (currSource != null && currSource.isOn()) {

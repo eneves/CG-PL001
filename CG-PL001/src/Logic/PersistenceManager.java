@@ -12,8 +12,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,13 +19,14 @@ import java.util.logging.Logger;
  */
 public class PersistenceManager {
 
-    //private static String filename = "highway_data";
+    private static String filename = "highway_data_dft";
     private static BufferedReader in;
     private static BufferedWriter out;
 
     public static Simulator loadSimulator(String filename, boolean isEditorMode) {
         try {
             in = new BufferedReader(new FileReader(filename));
+            PersistenceManager.filename = filename;
             ArrayList<Section> road = new ArrayList();
             int roadLength = Integer.parseInt(in.readLine()) + 2;
             float x = 0;
@@ -44,7 +43,7 @@ public class PersistenceManager {
                     vecStr = in.readLine().split(" ");
                     section.setAngle(Float.parseFloat(vecStr[0]));
                     if (Integer.parseInt(vecStr[1]) != -1) {
-                        section.setSource(createSource(i, Integer.parseInt(vecStr[1]), section));
+                        section.setSource(createSource(Integer.parseInt(vecStr[1]), section));
                     }
                 }
                 road.add(i, section);
@@ -64,17 +63,9 @@ public class PersistenceManager {
         float x = 0;
         float y = 0;
         float z = 0;
-        float angle = 0;
         for (int i = 0; i < segmentsNumber + 2; i++) {
             Section section = new Section(i == 0 || i == segmentsNumber + 1, i == 1);
             if (!section.isAuxiliar()) {
-                if (angle < 90) {
-                    angle += 20;
-                    section.setAngle(20);
-                } else {
-                    angle -= 20;
-                    section.setAngle(-20);
-                }
                 section.setOriginX(x);
                 section.setOriginY(y);
                 section.setOriginZ(z);
@@ -85,11 +76,11 @@ public class PersistenceManager {
         return road;
     }
 
-    public static Source createSource(int position, int period, Section section) {
-        Source source = new Source(position, period);
+    public static Source createSource(int period, Section section) {
+        Source source = new Source(period);
         source.setOriginX(section.getOriginX() - 3.5f);
         source.setOriginY(section.getOriginY());
-        source.setOriginZ(section.getOriginZ());
+        source.setOriginZ(section.getOriginZ() + 2.0f);
         source.setOn(true);
         return source;
     }
@@ -102,11 +93,11 @@ public class PersistenceManager {
     //Tabela 1: Características da rede de estradas quando é omitido o nome do ficheiro.
     private static Simulator loadDefaults(boolean isEditorMode) {
         ArrayList<Section> road = createRoad(10);
-        Source s1 = createSource(1, 2, road.get(1));
+        Source s1 = createSource(2, road.get(1));
         road.get(1).setSource(s1);
-        Source s2 = createSource(4, 4, road.get(4));
+        Source s2 = createSource(4, road.get(4));
         road.get(4).setSource(s2);
-        Source s3 = createSource(5, 5, road.get(5));
+        Source s3 = createSource(5, road.get(5));
         road.get(5).setSource(s3);
         Simulator simulator = new Simulator(isEditorMode);
         simulator.setRoad(road);
@@ -115,7 +106,7 @@ public class PersistenceManager {
 
     public static void saveSimulator(ArrayList<Section> road) {
         try {
-            out = new BufferedWriter(new FileWriter(new File("highway_edited.txt")));
+            out = new BufferedWriter(new FileWriter(new File(PersistenceManager.filename)));
             StringBuilder sb = new StringBuilder();
             sb.append(road.size() - 2).append("\n");
             out.write(sb.toString());
@@ -135,8 +126,7 @@ public class PersistenceManager {
             }
         } catch (Exception e) {
             System.out.println("Ocorreu um erro ao gravar o ficheiro!!");
-        }
-        finally{
+        } finally {
             try {
                 out.close();
             } catch (IOException ex) {

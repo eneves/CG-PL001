@@ -46,7 +46,7 @@ public class TextDisplayer {
         // optionally set the color
         //upperLeft.setColor(1.0f, 0.2f, 0.2f, 0.8f);
         for (int i = 0; i < ulString.size(); i++) {
-            upperLeft.draw(ulString.get(i), 10, height - ((FONT_SIZE + 5) * (1 + i)));
+            upperLeft.draw(ulString.get(i), 10, height - (20 + ((FONT_SIZE + 5) * (1 + i))));
         }
         // ... more draw commands, color changes, etc.
         upperLeft.endRendering();
@@ -56,7 +56,7 @@ public class TextDisplayer {
         //upperLeft.setColor(1.0f, 0.2f, 0.2f, 0.8f);
 
         for (int i = 0; i < urString.size(); i++) {
-            upperRight.draw(urString.get(i), width - 200, height - ((FONT_SIZE + 5) * (1 + i)));
+            upperRight.draw(urString.get(i), width - 200, height - (20 + ((FONT_SIZE + 5) * (1 + i))));
         }
         // ... more draw commands, color changes, etc.
         upperRight.endRendering();
