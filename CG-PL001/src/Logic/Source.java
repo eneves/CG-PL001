@@ -77,6 +77,14 @@ public class Source {
     public int getPeriod() {
         return period;
     }
+    
+    public void incrementPeriod() {
+        period++;
+    }
+    
+    public void decrementPeriod() {
+        period--;
+    }
 
     public int getPosition() {
         return position;

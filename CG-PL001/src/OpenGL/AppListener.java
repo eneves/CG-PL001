@@ -116,6 +116,26 @@ public class AppListener
                     }
                 }
                 break;
+            case 'l': //aumenta periodo da fonte
+                if (this.simulator.hadSelection()) {
+                    int index = this.simulator.getRoad().indexOf(this.simulator.getSelectedSection());
+                    Section s = this.simulator.getSelectedSection();
+                    if (s.hasSource()) {
+                        s.getSource().incrementPeriod();
+                        this.simulator.getRoad().add(index, s);
+                    }
+                }
+                break;
+            case 'o': //diminui periodo da fonte
+                if (this.simulator.hadSelection()) {
+                    int index = this.simulator.getRoad().indexOf(this.simulator.getSelectedSection());
+                    Section s = this.simulator.getSelectedSection();
+                    if (s.hasSource() && s.getSource().getPeriod()>1 ) {
+                        s.getSource().decrementPeriod();
+                        this.simulator.getRoad().add(index, s);
+                    }
+                }
+                break;
             case 'i': //aumentar ângulo
                 if (this.simulator.hadSelection()) {
                     Section s = this.simulator.getSelectedSection();
@@ -128,7 +148,7 @@ public class AppListener
                     this.simulator.getSelectedSection().setAngle((float) (s.getAngle() - 0.1));
                 }
                 break;
-            case 'l'://grava um ficheiro com a configuração actual
+            case 'ç'://grava um ficheiro com a configuração actual
                 PersistenceManager.saveSimulator(this.simulator.getRoad());
                 System.out.println("Edição actual gravada no ficheiro de texto");
                 break;
