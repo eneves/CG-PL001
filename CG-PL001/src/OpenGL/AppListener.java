@@ -146,16 +146,16 @@ public class AppListener
                     }
                 }
                 break;
-            case 'i': //aumentar ângulo
-                if (this.simulator.hadSelection()) {
+            case 'i': //aumentar ângulo enquanto for menor que 45º
+                if (this.simulator.hadSelection() && this.simulator.getSelectedSection().getAngle() < 45 ) {
                     Section s = this.simulator.getSelectedSection();
-                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() + 0.1));
+                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() + 1));
                 }
                 break;
-            case 'u': //diminui ângulo
-                if (this.simulator.hadSelection()) {
+            case 'u': //diminui ângulo enquanto for maior que -45º
+                if (this.simulator.hadSelection() && this.simulator.getSelectedSection().getAngle() > -45) {
                     Section s = this.simulator.getSelectedSection();
-                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() - 0.1));
+                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() - 1));
                 }
                 break;
             case 'ç'://grava um ficheiro com a configuração actual
