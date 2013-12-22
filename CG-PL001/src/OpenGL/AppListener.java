@@ -51,6 +51,7 @@ public class AppListener
                             newSection.setOriginZ(z * i);
                             newSection.setAngle(s.getAngle());
                             newRoad.add(i, newSection);
+                            s.setIsFirst(false);
                             i++;
                         }
                         if (s.isAuxiliar()) {
