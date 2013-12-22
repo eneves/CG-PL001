@@ -6,7 +6,10 @@
 package Logic;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 /**
@@ -104,6 +107,16 @@ public class PersistenceManager {
         return simulator;
     }
 
-    public static void saveSimulator() {
+    public static void saveSimulator(ArrayList<Section> road) {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter(new File("highway_edited")));
+            for (Section s : road) {
+                StringBuilder sb = new StringBuilder();
+                
+                out.write(sb.toString());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
