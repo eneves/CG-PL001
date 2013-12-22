@@ -85,9 +85,9 @@ public class AppListener
                     ArrayList<Section> road = this.simulator.getRoad();
                     int index = road.indexOf(this.simulator.getSelectedSection());
                     road.remove(index);
-                    this.simulator.setRoad(road);                                      
+                    this.simulator.setRoad(road);
+                    this.simulator.removeSelection();
                 }
-                System.out.println("n pressionada!");
                 break;
             case 'ç'://grava um ficheiro com a configuração actual
                 PersistenceManager.saveSimulator();
