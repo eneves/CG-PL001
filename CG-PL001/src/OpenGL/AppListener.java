@@ -51,6 +51,7 @@ public class AppListener
                             i++;
                         }
                         s.setOriginZ(z * i);
+                        //s.getSource().setOriginZ(s.getOriginZ());
                         newRoad.add(i, s);
                         i++;
                     }
@@ -67,6 +68,7 @@ public class AppListener
                     float z = 10;
                     for (Section s : road) {
                         s.setOriginZ(z * i);
+                        //s.getSource().setOriginZ(s.getOriginZ());
                         newRoad.add(i, s);
                         if (i == index) {
                             Section newSection = s;
@@ -102,24 +104,31 @@ public class AppListener
                     }
                 }
                 break;
-                case 'j': //remove fonte
+            case 'j': //remove fonte
                 if (this.simulator.hadSelection()) {
                     ArrayList<Section> road = this.simulator.getRoad();
                     int index = road.indexOf(this.simulator.getSelectedSection());
                     Section s = this.simulator.getSelectedSection();
-                    if (!s.hasSource()) {
-                        Source source = PersistenceManager.createSource(index, 1, s);
-                        s.setSource(source);
+                    if (s.hasSource()) {
+                        s.setSource(null);
                         road.add(index, s);
                         this.simulator.setRoad(road);
                     }
                 }
                 break;
-                
-                
-                
-                
-            case 'ç'://grava um ficheiro com a configuração actual
+            case 'i': //aumentar ângulo
+                if (this.simulator.hadSelection()) {
+                    Section s = this.simulator.getSelectedSection();
+                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() + 0.1));
+                }
+                break;
+            case 'u': //diminui ângulo
+                if (this.simulator.hadSelection()) {
+                    Section s = this.simulator.getSelectedSection();
+                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() - 0.1));
+                }
+                break;
+            case 'l'://grava um ficheiro com a configuração actual
                 PersistenceManager.saveSimulator();
                 System.out.println("Edição actual gravada no ficheiro de texto");
                 break;
