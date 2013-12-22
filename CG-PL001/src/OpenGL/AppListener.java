@@ -205,12 +205,22 @@ public class AppListener
                 this.center[2] += 0.1f * Math.sin(viewAngle);
                 break;
             case 'e':
-                this.center[0] = eye[0] + (float) (distanceEyeToCenter() * Math.cos(viewAngle + 0.17));
-                this.center[2] = eye[2] + (float) (distanceEyeToCenter() * Math.sin(viewAngle + 0.17));
+                float sinal = center[2] - eye[2] < 0 ? -1.0f : 1.0f;
+                float newAngle = viewAngle + 0.17f;
+                if (sinal < 0) {
+                    newAngle = (float) (2 * Math.PI - (viewAngle - 0.17f));
+                }
+                this.center[0] = eye[0] + (float) (2.0f * Math.cos(newAngle));
+                this.center[2] = eye[2] + (float) (2.0f * Math.sin(newAngle));
                 break;
             case 'q':
-                this.center[0] = eye[0] + (float) (distanceEyeToCenter() * Math.cos(viewAngle - 0.17));
-                this.center[2] = eye[2] + (float) (distanceEyeToCenter() * Math.sin(viewAngle - 0.17));
+                sinal = center[2] - eye[2] < 0 ? -1.0f : 1.0f;
+                newAngle = viewAngle - 0.17f;
+                if (sinal < 0) {
+                    newAngle = (float) (2 * Math.PI - (viewAngle + 0.17f));
+                }
+                this.center[0] = eye[0] + (float) (2.0f * Math.cos(newAngle));
+                this.center[2] = eye[2] + (float) (2.0f * Math.sin(newAngle));
                 break;
             case ' ':
                 this.simulator.setIsEditorMode(true);
@@ -229,7 +239,6 @@ public class AppListener
                     }
                 }
                 break;
-            // TODO: Check this keys
             case 'f':
                 this.eye[1] -= 0.1f;
                 this.center[1] -= 0.1f;
@@ -251,7 +260,9 @@ public class AppListener
     public void keyPressed(KeyEvent ke) {
         /*if (simulator.isIsEditorMode()) {
 
-         } else {*/
+         } else {
+
+         }*/
         switch (ke.getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 simulator.selectLeft();
@@ -263,7 +274,6 @@ public class AppListener
                 simulator.removeSelection();
                 break;
         }
-        //}
         this.canvas.display();
     }
     
