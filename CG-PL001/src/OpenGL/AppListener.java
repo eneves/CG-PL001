@@ -1,10 +1,12 @@
 package OpenGL;
 
 import Logic.PersistenceManager;
+import Logic.Section;
 import Logic.Simulator;
 import Logic.Source;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,11 +36,59 @@ public class AppListener
 
     private void keyTypedInEdition(char chars) {
         switch (chars) {
-            case 'm': //passa para o segmento seguinte
-
+            case 'm': //adiciona segmento antes
+                if (this.simulator.hadSelection()) {
+                    ArrayList<Section> road = this.simulator.getRoad();
+                    ArrayList<Section> newRoad = new ArrayList();
+                    int index = road.indexOf(this.simulator.getSelectedSection());
+                    int i = 0;
+                    float z = 10;
+                    for (Section s : road) {
+                        if (i == index) {
+                            Section newSection = s;
+                            newSection.setOriginZ(z * i);
+                            newRoad.add(i, s);
+                            i++;
+                        }
+                        s.setOriginZ(z * i);
+                        newRoad.add(i, s);
+                        i++;
+                    }
+                    this.simulator.setRoad(newRoad);
+                }
                 System.out.println("m pressionada!");
                 break;
-
+            case 'n': //adiciona segmento depois
+                if (this.simulator.hadSelection()) {
+                    ArrayList<Section> road = this.simulator.getRoad();
+                    ArrayList<Section> newRoad = new ArrayList();
+                    int index = road.indexOf(this.simulator.getSelectedSection());
+                    int i = 0;
+                    float z = 10;
+                    for (Section s : road) {
+                        s.setOriginZ(z * i);
+                        newRoad.add(i, s);
+                        if (i == index) {
+                            Section newSection = s;
+                            newSection.setOriginZ(z * (i + 1));
+                            newRoad.add(i + 1, s);
+                            i++;
+                        }
+                        i++;
+                    }
+                    this.simulator.setRoad(newRoad);
+                }
+                System.out.println("n pressionada!");
+                break;
+            case 'b': //remove segmento
+                if (this.simulator.hadSelection()) {
+                    ArrayList<Section> road = this.simulator.getRoad();
+                    int index = road.indexOf(this.simulator.getSelectedSection());
+                    road.remove(index);
+                    this.simulator.setRoad(road);                                      
+                }
+                System.out.println("n pressionada!");
+                break;
             case 'ç'://grava um ficheiro com a configuração actual
                 PersistenceManager.saveSimulator();
                 System.out.println("Edição actual gravada no ficheiro de texto");
