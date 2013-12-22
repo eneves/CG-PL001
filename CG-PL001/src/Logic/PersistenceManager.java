@@ -76,7 +76,7 @@ public class PersistenceManager {
         return road;
     }
 
-    private static Source createSource(int position, int period, Section section) {
+    public static Source createSource(int position, int period, Section section) {
         Source source = new Source(position, period);
         source.setOriginX(section.getOriginX() - 3.5f);
         source.setOriginY(section.getOriginY());

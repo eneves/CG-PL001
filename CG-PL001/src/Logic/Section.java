@@ -34,6 +34,10 @@ public class Section {
     public void setSource(Source source) {
         this.source = source;
     }
+    
+    public boolean hasSource(){
+        return this.source!= null;
+    }
 
     public float getAngle() {
         return angle;

@@ -89,6 +89,36 @@ public class AppListener
                     this.simulator.removeSelection();
                 }
                 break;
+            case 'k': //insere fonte com periodo por default = 1
+                if (this.simulator.hadSelection()) {
+                    ArrayList<Section> road = this.simulator.getRoad();
+                    int index = road.indexOf(this.simulator.getSelectedSection());
+                    Section s = this.simulator.getSelectedSection();
+                    if (!s.hasSource()) {
+                        Source source = PersistenceManager.createSource(index, 1, s);
+                        s.setSource(source);
+                        road.add(index, s);
+                        this.simulator.setRoad(road);
+                    }
+                }
+                break;
+                case 'j': //remove fonte
+                if (this.simulator.hadSelection()) {
+                    ArrayList<Section> road = this.simulator.getRoad();
+                    int index = road.indexOf(this.simulator.getSelectedSection());
+                    Section s = this.simulator.getSelectedSection();
+                    if (!s.hasSource()) {
+                        Source source = PersistenceManager.createSource(index, 1, s);
+                        s.setSource(source);
+                        road.add(index, s);
+                        this.simulator.setRoad(road);
+                    }
+                }
+                break;
+                
+                
+                
+                
             case 'ç'://grava um ficheiro com a configuração actual
                 PersistenceManager.saveSimulator();
                 System.out.println("Edição actual gravada no ficheiro de texto");
