@@ -97,12 +97,17 @@ public class AppListener
                 }
                 break;
             case 'b': //remove segmento
-                if (this.simulator.hadSelection()) {
+                if (this.simulator.hadSelection() && this.simulator.getRoad().size() > 3 ) {
                     ArrayList<Section> road = this.simulator.getRoad();
                     int index = road.indexOf(this.simulator.getSelectedSection());
                     road.remove(index);
-                    this.simulator.setRoad(road);
                     this.simulator.removeSelection();
+                    for(int i=index; i<road.size()-1; i++){
+                        road.get(i).setOriginZ(10*(i-1));
+                        if(road.get(i).hasSource()){
+                            road.get(i).getSource().setOriginZ(road.get(i).getOriginZ());
+                        }
+                    }
                 }
                 break;
             case 'k': //insere fonte com periodo por default = 1
@@ -113,40 +118,30 @@ public class AppListener
                     if (!s.hasSource()) {
                         Source source = PersistenceManager.createSource(index, 1, s);
                         s.setSource(source);
-                        road.add(index, s);
-                        this.simulator.setRoad(road);
                     }
                 }
                 break;
             case 'j': //remove fonte
                 if (this.simulator.hadSelection()) {
-                    ArrayList<Section> road = this.simulator.getRoad();
-                    int index = road.indexOf(this.simulator.getSelectedSection());
                     Section s = this.simulator.getSelectedSection();
                     if (s.hasSource()) {
                         s.setSource(null);
-                        road.add(index, s);
-                        this.simulator.setRoad(road);
                     }
                 }
                 break;
             case 'l': //aumenta periodo da fonte
                 if (this.simulator.hadSelection()) {
-                    int index = this.simulator.getRoad().indexOf(this.simulator.getSelectedSection());
                     Section s = this.simulator.getSelectedSection();
                     if (s.hasSource()) {
                         s.getSource().incrementPeriod();
-                        this.simulator.getRoad().add(index, s);
                     }
                 }
                 break;
             case 'o': //diminui periodo da fonte
                 if (this.simulator.hadSelection()) {
-                    int index = this.simulator.getRoad().indexOf(this.simulator.getSelectedSection());
                     Section s = this.simulator.getSelectedSection();
                     if (s.hasSource() && s.getSource().getPeriod() > 1) {
                         s.getSource().decrementPeriod();
-                        this.simulator.getRoad().add(index, s);
                     }
                 }
                 break;
