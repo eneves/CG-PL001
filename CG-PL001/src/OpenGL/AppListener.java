@@ -51,6 +51,7 @@ public class AppListener
                             newSection.setOriginZ(z * i);
                             newSection.setAngle(s.getAngle());
                             newRoad.add(i, newSection);
+                            s.setIsFirst(false);
                             i++;
                         }
                         if (s.isAuxiliar()) {
@@ -110,13 +111,13 @@ public class AppListener
                     }
                 }
                 break;
-            case 'k': //insere fonte com periodo por default = 1
+            case 'k': //insere fonte com periodo por default = 5
                 if (this.simulator.hadSelection()) {
                     ArrayList<Section> road = this.simulator.getRoad();
                     int index = road.indexOf(this.simulator.getSelectedSection());
                     Section s = this.simulator.getSelectedSection();
                     if (!s.hasSource()) {
-                        Source source = PersistenceManager.createSource(index, 1, s);
+                        Source source = PersistenceManager.createSource(index, 5, s);
                         s.setSource(source);
                     }
                 }
@@ -145,16 +146,16 @@ public class AppListener
                     }
                 }
                 break;
-            case 'i': //aumentar ângulo
-                if (this.simulator.hadSelection()) {
+            case 'i': //aumentar ângulo enquanto for menor que 45º
+                if (this.simulator.hadSelection() && this.simulator.getSelectedSection().getAngle() < 45 ) {
                     Section s = this.simulator.getSelectedSection();
-                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() + 0.1));
+                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() + 1));
                 }
                 break;
-            case 'u': //diminui ângulo
-                if (this.simulator.hadSelection()) {
+            case 'u': //diminui ângulo enquanto for maior que -45º
+                if (this.simulator.hadSelection() && this.simulator.getSelectedSection().getAngle() > -45) {
                     Section s = this.simulator.getSelectedSection();
-                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() - 0.1));
+                    this.simulator.getSelectedSection().setAngle((float) (s.getAngle() - 1));
                 }
                 break;
             case 'ç'://grava um ficheiro com a configuração actual
