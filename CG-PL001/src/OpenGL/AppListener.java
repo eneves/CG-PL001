@@ -19,11 +19,11 @@ import javax.media.opengl.awt.GLCanvas;
  */
 public class AppListener
         extends StaticListener {
-
+    
     public AppListener(GLCanvas canvas, Simulator simulator) {
         super(canvas, simulator);
     }
-
+    
     @Override
     public void keyTyped(KeyEvent ke) {
         if (this.simulator.isIsEditorMode()) {
@@ -33,7 +33,7 @@ public class AppListener
         }
         this.canvas.display();
     }
-
+    
     private void keyTypedInEdition(char chars) {
         switch (chars) {
             case 'm': //adiciona segmento antes
@@ -45,13 +45,22 @@ public class AppListener
                     float z = 10;
                     for (Section s : road) {
                         if (i == index) {
-                            Section newSection = s;
+                            Section newSection = new Section(false, i == 1);
+                            newSection.setOriginX(0);
+                            newSection.setOriginY(0);
                             newSection.setOriginZ(z * i);
-                            newRoad.add(i, s);
+                            newSection.setAngle(s.getAngle());
+                            newRoad.add(i, newSection);
                             i++;
                         }
-                        s.setOriginZ(z * i);
-                        //s.getSource().setOriginZ(s.getOriginZ());
+                        if (s.isAuxiliar()) {
+                            s.setOriginZ(0);
+                        } else {
+                            s.setOriginZ(z * i);
+                            if (s.hasSource()) {
+                                s.getSource().setOriginZ(s.getOriginZ());
+                            }
+                        }
                         newRoad.add(i, s);
                         i++;
                     }
@@ -67,13 +76,22 @@ public class AppListener
                     int i = 0;
                     float z = 10;
                     for (Section s : road) {
-                        s.setOriginZ(z * i);
-                        //s.getSource().setOriginZ(s.getOriginZ());
+                        if (s.isAuxiliar()) {
+                            s.setOriginZ(0);
+                        } else {
+                            s.setOriginZ(z * i);
+                            if (s.hasSource()) {
+                                s.getSource().setOriginZ(s.getOriginZ());
+                            }
+                        }
                         newRoad.add(i, s);
-                        if (i == index) {
-                            Section newSection = s;
-                            newSection.setOriginZ(z * (i + 1));
-                            newRoad.add(i + 1, s);
+                         if (i == index) {
+                            Section newSection = new Section(false, i == 1);
+                            newSection.setOriginX(0);
+                            newSection.setOriginY(0);
+                            newSection.setOriginZ(z * i);
+                            newSection.setAngle(s.getAngle());
+                            newRoad.add(i, newSection);
                             i++;
                         }
                         i++;
@@ -130,7 +148,7 @@ public class AppListener
                 if (this.simulator.hadSelection()) {
                     int index = this.simulator.getRoad().indexOf(this.simulator.getSelectedSection());
                     Section s = this.simulator.getSelectedSection();
-                    if (s.hasSource() && s.getSource().getPeriod()>1 ) {
+                    if (s.hasSource() && s.getSource().getPeriod() > 1) {
                         s.getSource().decrementPeriod();
                         this.simulator.getRoad().add(index, s);
                     }
@@ -157,9 +175,9 @@ public class AppListener
                 break;
         }
     }
-
+    
     private void keyTypedInSimulation(char chars) {
-
+        
         float viewAngle = getViewAngle();
         switch (chars) {
             case 'a':
@@ -228,7 +246,7 @@ public class AppListener
                 break;
         }
     }
-
+    
     @Override
     public void keyPressed(KeyEvent ke) {
         /*if (simulator.isIsEditorMode()) {
@@ -248,14 +266,14 @@ public class AppListener
         //}
         this.canvas.display();
     }
-
+    
     @Override
     public void mouseClicked(MouseEvent me) {
         System.out.println("mouse clicked!");
         //System.out.println(me.getX()); //To change body of generated methods, choose Tools | Templates.
         //System.out.println(me.getXOnScreen()); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
     public void toogleAnimation() {
         if (simulator.isAnimationRunning()) {
             simulator.toogleAnimation();
@@ -263,12 +281,12 @@ public class AppListener
             simulator.toogleAnimation();
             AnimationThread animation = new AnimationThread();
             new Thread(animation).start();
-
+            
         }
     }
-
+    
     class AnimationThread implements Runnable {
-
+        
         @Override
         public void run() {
             while (simulator.isAnimationRunning()) {
