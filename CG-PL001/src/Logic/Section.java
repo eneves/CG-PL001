@@ -5,6 +5,8 @@
  */
 package Logic;
 
+import OpenGL.AppTexture;
+import OpenGL.StaticListener;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
@@ -142,6 +144,16 @@ public class Section {
     public void render(GL2 gl) {
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
         gl.glRotatef(angle, 0, 1, 0);
+        
+
+        AppTexture roadTexture = StaticListener.textureDic.get("road");
+        if (roadTexture != null && roadTexture.isSuccess()) {
+            roadTexture.getTexture().enable(gl);
+            roadTexture.getTexture().bind(gl);
+        }
+        
+        
+        
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Front-face
@@ -179,9 +191,14 @@ public class Section {
 
         // Top-face
         //gl.glColor3f(1.0f, 1.0f, 0.0f); // yellow
+        
+        gl.glTexCoord2f(roadTexture.getTextureLeft(), roadTexture.getTextureTop());
         gl.glVertex3f(3.5f, 0.0f, 0.0f);
+        gl.glTexCoord2f(roadTexture.getTextureRight(), roadTexture.getTextureTop());
         gl.glVertex3f(3.5f, 0.0f, 10.0f);
+        gl.glTexCoord2f(roadTexture.getTextureRight(), roadTexture.getTextureBottom());
         gl.glVertex3f(-3.5f, 0.0f, 10.0f);
+        gl.glTexCoord2f(roadTexture.getTextureLeft(), roadTexture.getTextureBottom());
         gl.glVertex3f(-3.5f, 0.0f, 0.0f);
 
         // Bottom-face
@@ -220,8 +237,11 @@ public class Section {
 
         gl.glBegin(GL.GL_TRIANGLES); // of the color cube
         if (!first && angle < 0) {
+            gl.glTexCoord2f(roadTexture.getTextureLeft(), roadTexture.getTextureBottom());
             gl.glVertex3f(0.0f, 0.0f, 0.0f);
+            gl.glTexCoord2f(roadTexture.getTextureLeft(), roadTexture.getTextureTop());
             gl.glVertex3f(3.5f, 0.0f, 0.0f);
+            gl.glTexCoord2f(roadTexture.getTextureRight(), roadTexture.getTextureTop());
             gl.glVertex3f(3.5f - deltaX, 0.0f, deltaZ);
 
             gl.glVertex3f(0.0f, -0.3f, 0.0f);
@@ -237,6 +257,12 @@ public class Section {
             gl.glVertex3f(-3.5f + deltaX, -0.3f, -deltaZ);
         }
         gl.glEnd();
+        
+        if (roadTexture != null && roadTexture.isSuccess()) {
+            roadTexture.getTexture().disable(gl);
+        }
+        
+        
         gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe 
 
         if (rightSide != null) {

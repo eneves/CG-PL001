@@ -5,7 +5,10 @@
  */
 package Logic;
 
+import OpenGL.AppTexture;
+import OpenGL.StaticListener;
 import java.util.Random;
+import static javax.media.opengl.GL.GL_TRIANGLES;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
 
@@ -81,7 +84,7 @@ public class Source {
     public void decrementPeriod() {
         period--;
     }
-  
+
     public void incrementTick() {
         currentTick++;
     }
@@ -95,7 +98,15 @@ public class Source {
     }
 
     public void render(GL2 gl) {
-        gl.glTranslatef(originX, originY, originZ); // translate to relative axe
+
+        gl.glTranslatef(originX, originY, originZ); // translate to relative axe   
+
+        AppTexture sideWall = StaticListener.textureDic.get("house_side");
+        if (sideWall != null && sideWall.isSuccess()) {
+            sideWall.getTexture().enable(gl);
+            sideWall.getTexture().bind(gl);
+        }
+
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Front-face
@@ -104,47 +115,138 @@ public class Source {
         } else {
             gl.glColor3f(0.8f, 0.8f, 0.8f); // grey
         }
+
+        gl.glTexCoord2f(sideWall.getTextureRight(), sideWall.getTextureBottom());
         gl.glVertex3f(-3.0f, 0.0f, 0.0f);
+        gl.glTexCoord2f(sideWall.getTextureRight(), sideWall.getTextureTop());
         gl.glVertex3f(-3.0f, 6.0f, 0.0f);
+        gl.glTexCoord2f(sideWall.getTextureLeft(), sideWall.getTextureTop());
         gl.glVertex3f(0.0f, 6.0f, 0.0f);
+        gl.glTexCoord2f(sideWall.getTextureLeft(), sideWall.getTextureBottom());
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
+
 
         // Back-face
         //gl.glColor3f(1.0f, 0.0f, 1.0f); // purple
+        gl.glTexCoord2f(sideWall.getTextureRight(), sideWall.getTextureBottom());
         gl.glVertex3f(-3.0f, 0.0f, 6.0f);
+        gl.glTexCoord2f(sideWall.getTextureRight(), sideWall.getTextureTop());
         gl.glVertex3f(-3.0f, 6.0f, 6.0f);
+        gl.glTexCoord2f(sideWall.getTextureLeft(), sideWall.getTextureTop());
         gl.glVertex3f(0.0f, 6.0f, 6.0f);
+        gl.glTexCoord2f(sideWall.getTextureLeft(), sideWall.getTextureBottom());
         gl.glVertex3f(0.0f, 0.0f, 6.0f);
 
+        gl.glEnd();
+        if (sideWall != null && sideWall.isSuccess()) {
+            sideWall.getTexture().disable(gl);
+        }
+        AppTexture frontWall = StaticListener.textureDic.get("house_front");
+        if (frontWall != null && frontWall.isSuccess()) {
+            frontWall.getTexture().enable(gl);
+            frontWall.getTexture().bind(gl);
+        }
+        gl.glBegin(GL_QUADS); // of the color cube
         // Left-face
         //gl.glColor3f(1.0f, 0.0f, 0.0f); // red
+        gl.glTexCoord2f(frontWall.getTextureRight(), frontWall.getTextureBottom());
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
+        gl.glTexCoord2f(frontWall.getTextureRight(), frontWall.getTextureTop());
         gl.glVertex3f(0.0f, 6.0f, 0.0f);
+        gl.glTexCoord2f(frontWall.getTextureLeft(), frontWall.getTextureTop());
         gl.glVertex3f(0.0f, 6.0f, 6.0f);
+        gl.glTexCoord2f(frontWall.getTextureLeft(), frontWall.getTextureBottom());
         gl.glVertex3f(0.0f, 0.0f, 6.0f);
+        gl.glEnd();
+        if (frontWall != null && frontWall.isSuccess()) {
+            frontWall.getTexture().disable(gl);
+        }
+        AppTexture backWall = StaticListener.textureDic.get("house_back");
+        if (backWall != null && backWall.isSuccess()) {
+            backWall.getTexture().enable(gl);
+            backWall.getTexture().bind(gl);
+        }
+        gl.glBegin(GL_QUADS); // of the color cube
 
         // Right-face
         //gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureBottom());
         gl.glVertex3f(-3.0f, 0.0f, 0.0f);
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureTop());
         gl.glVertex3f(-3.0f, 6.0f, 0.0f);
+        gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureTop());
         gl.glVertex3f(-3.0f, 6.0f, 6.0f);
+        gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureBottom());
         gl.glVertex3f(-3.0f, 0.0f, 6.0f);
-
+        gl.glEnd();
+        if (backWall != null && backWall.isSuccess()) {
+            backWall.getTexture().disable(gl);
+        }
+        AppTexture roof = StaticListener.textureDic.get("house_roof");
+        if (roof != null && roof.isSuccess()) {
+            roof.getTexture().enable(gl);
+            roof.getTexture().bind(gl);
+        }
+        
+        
+        
+        gl.glBegin(GL_QUADS); // of the color cube
         // Top-face
         //gl.glColor3f(1.0f, 1.0f, 0.0f); // yellow
+        //front-roof
+        gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureBottom());
         gl.glVertex3f(0.0f, 6.0f, 0.0f);
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureBottom());
         gl.glVertex3f(0.0f, 6.0f, 6.0f);
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureTop());
+        gl.glVertex3f(-1.5f, 7.0f, 5.4f);
+        gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureTop());
+        gl.glVertex3f(-1.5f, 7.0f, 0.6f);
+        //back-roof
+        gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureBottom());
         gl.glVertex3f(-3.0f, 6.0f, 0.0f);
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureBottom());
         gl.glVertex3f(-3.0f, 6.0f, 6.0f);
-
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureTop());
+        gl.glVertex3f(-1.5f, 7.0f, 5.4f);
+        gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureTop());
+        gl.glVertex3f(-1.5f, 7.0f, 0.6f);        
+        gl.glEnd();
+        
+        
+        gl.glBegin(GL_TRIANGLES); // of the color cube
+        // right side roof
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureBottom());
+        gl.glVertex3f(0.0f, 6.0f, 0.0f);
+        gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureBottom());
+        gl.glVertex3f(-3.0f, 6.0f, 0.0f);
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureTop());
+        gl.glVertex3f(-1.5f, 7.0f, 0.6f);
+        // left side roof
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureBottom());
+        gl.glVertex3f(0.0f, 6.0f, 6.0f);
+        gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureBottom());
+        gl.glVertex3f(-3.0f, 6.0f, 6.0f);
+        gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureTop());
+        gl.glVertex3f(-1.5f, 7.0f, 5.4f);
+        gl.glEnd();
+        
+        if (roof != null && roof.isSuccess()) {
+            roof.getTexture().disable(gl);
+        }
+        gl.glBegin(GL_QUADS); // of the color cube
         // Bottom-face
         //gl.glColor3f(0.0f, 1.0f, 1.0f); // cyan        
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
         gl.glVertex3f(0.0f, 0.0f, 6.0f);
-        gl.glVertex3f(-3.0f, 0.0f, 0.0f);
         gl.glVertex3f(-3.0f, 0.0f, 6.0f);
+        gl.glVertex3f(-3.0f, 0.0f, 0.0f);
 
         gl.glEnd();
+
+        
+        
         gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe   
+
     }
 }

@@ -6,13 +6,23 @@ import Logic.Simulator.ViewportSize;
 import Logic.Source;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
+import javax.media.opengl.GL;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
 import static javax.media.opengl.GL.GL_LEQUAL;
+import static javax.media.opengl.GL.GL_LINEAR;
+import static javax.media.opengl.GL.GL_LINEAR_MIPMAP_LINEAR;
 import static javax.media.opengl.GL.GL_NICEST;
+import static javax.media.opengl.GL.GL_REPEAT;
+import static javax.media.opengl.GL.GL_TEXTURE_2D;
+import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
+import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
+import static javax.media.opengl.GL.GL_TEXTURE_WRAP_S;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
+import static javax.media.opengl.GL2GL3.GL_QUADS;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
@@ -59,9 +69,14 @@ public class StaticListener
     protected volatile Simulator simulator;
     private TextDisplayer textDisplay;
 
+    public static HashMap<String, AppTexture> textureDic;
+
     StaticListener(GLCanvas canvas, Simulator simulator) {
         this.canvas = canvas;
         this.simulator = simulator;
+        if (textureDic == null) {
+            textureDic = new HashMap<>();
+        }
         this.status();
     }
 
@@ -70,13 +85,27 @@ public class StaticListener
         GL2 gl = glad.getGL().getGL2();      // get the OpenGL graphics context
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // set background (clear) color
         gl.glClearDepth(1.0f);      // set clear depth value to farthest
-        gl.glEnable(GL_DEPTH_TEST); // enables depth testing
         gl.glDepthFunc(GL_LEQUAL);  // the type of depth test to do
         gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // best perspective correction
-        gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting
+        gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting   
+        gl.glEnable(GL_DEPTH_TEST); // enables depth testing
+        //gl.glEnable(GL_LIGHTING);
+        //gl.glEnable(GL_LIGHT0);
+        //float[] floatArray = {50,50,50};
+        //gl.glLightModelfv(GL_LIGHT_MODEL_AMBIENT, floatArray,0);
+        //gl.glLightf(GL_LIGHT0, GL_DIFFUSE, 100);
+        //gl.glEnable(GL_CULL_FACE);
+        //gl.glCullFace(GL_BACK);
+        //gl.glEnable(GL_COLOR_MATERIAL);
+        //gl.glColorMaterial(GL.GL_FRONT, GL_DIFFUSE);
+
+        // Load all textures
+        loadTextures(gl);
 
         textDisplay = new TextDisplayer();
 
+        //float[] floatArray = {0,50,50};
+        //gl.glLightfv(GL_LIGHT0, GL_POSITION,floatArray ,0);
         System.out.println("GLEventListener.init(GLAutoDrawable)");
     }
 
@@ -89,14 +118,50 @@ public class StaticListener
     public void display(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
-        gl.glLoadIdentity();
+        
+        //int currentInstant = simulator.getCurrentInstant();
+        float hourDayFactor = (float)Math.abs( Math.cos(Math.toRadians((double) simulator.getCurrentInstant())));
 
+        float red = 0.53f * hourDayFactor;
+        float green = 0.81f * hourDayFactor;
+        float blue = 0.93f * hourDayFactor;
+
+        gl.glClearColor(red, green, blue, 1.0f);
+        gl.glLoadIdentity();
         GLU glu = GLU.createGLU(gl);
         glu.gluLookAt(
                 this.eye[0], this.eye[1], this.eye[2],
                 this.center[0], this.center[1], this.center[2],
                 this.up[0], this.up[1], this.up[2]
         );
+
+        gl.glColor3f(1, 1, 1);
+
+        // create grass plane
+        AppTexture grass = StaticListener.textureDic.get("grass");
+        if (grass != null && grass.isSuccess()) {
+            grass.getTexture().enable(gl);
+            grass.getTexture().bind(gl);
+        }
+        float maxSize = 10000;
+        float repeatRacio = maxSize / 10.0f;
+        gl.glBegin(GL_QUADS); // of the color cube
+
+        gl.glTexCoord2f(repeatRacio, 0);
+        gl.glVertex3f(-maxSize, -0.3f, maxSize);
+        gl.glTexCoord2f(repeatRacio, repeatRacio);
+        gl.glVertex3f(maxSize, -0.3f, maxSize);
+        gl.glTexCoord2f(0, repeatRacio);
+        gl.glVertex3f(maxSize, -0.3f, -maxSize);
+        gl.glTexCoord2f(0, 0);
+        gl.glVertex3f(-maxSize, -0.3f, -maxSize);
+
+        gl.glEnd();
+
+        if (grass != null && grass.isSuccess()) {
+            grass.getTexture().disable(gl);
+        }
+
         simulator.render(gl);
         updateText();
         textDisplay.render(drawable.getWidth(), drawable.getHeight());
@@ -199,6 +264,40 @@ public class StaticListener
         System.out.format("   Eye:  ( %5.1f , %5.1f , %5.1f )\n", this.eye[0], this.eye[1], this.eye[2]);
         System.out.format("Center:  ( %5.1f , %5.1f , %5.1f )\n", this.center[0], this.center[1], this.center[2]);
         System.out.format("    Up:  ( %5.1f , %5.1f , %5.1f )\n", this.up[0], this.up[1], this.up[2]);
+    }
+
+    private void loadTextures(GL2 gl) {
+        if (!textureDic.containsKey("test")) {
+            textureDic.put("test", new AppTexture("resources/test.jpg", gl));
+        }
+        if (!textureDic.containsKey("car_top")) {
+            textureDic.put("car_top", new AppTexture("resources/car_top.jpg", gl));
+        }
+        if (!textureDic.containsKey("house_back")) {
+            textureDic.put("house_back", new AppTexture("resources/house_back_wall.jpg", gl));
+        }
+        if (!textureDic.containsKey("house_front")) {
+            textureDic.put("house_front", new AppTexture("resources/house_front_wall.jpg", gl));
+        }
+        if (!textureDic.containsKey("house_side")) {
+            textureDic.put("house_side", new AppTexture("resources/house_side_wall.jpg", gl));
+        }
+        if (!textureDic.containsKey("house_roof")) {
+            textureDic.put("house_roof", new AppTexture("resources/house_roof.jpg", gl));
+        }
+        if (!textureDic.containsKey("grass")) {
+            AppTexture newTexture = new AppTexture("resources/grass.jpg", gl);
+            newTexture.getTexture().setTexParameterf(gl, GL.GL_TEXTURE_WRAP_T, GL_REPEAT);
+            newTexture.getTexture().setTexParameterf(gl, GL.GL_TEXTURE_WRAP_S, GL_REPEAT);
+            //newTexture.getTexture().setTexParameterf(gl, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            newTexture.getTexture().setTexParameterf(gl, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            textureDic.put("grass", newTexture);
+        }
+        if (!textureDic.containsKey("road")) {
+            AppTexture newTexture = new AppTexture("resources/road.jpg", gl);
+            textureDic.put("road", newTexture);
+        }
+
     }
 
 }
