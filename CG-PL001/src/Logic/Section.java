@@ -10,6 +10,9 @@ import OpenGL.StaticListener;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 
 /**
  *
@@ -144,23 +147,26 @@ public class Section {
     public void render(GL2 gl) {
         gl.glTranslatef(originX, originY, originZ); // translate to relative axe
         gl.glRotatef(angle, 0, 1, 0);
-        
 
         AppTexture roadTexture = StaticListener.textureDic.get("road");
         if (roadTexture != null && roadTexture.isSuccess()) {
             roadTexture.getTexture().enable(gl);
             roadTexture.getTexture().bind(gl);
         }
-        
-        
-        
+
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Front-face
         if (selected) {
-            gl.glColor3f(0.5f, 0.5f, 0.4f); // grey
+            float[] rgba = {0.5f, 0.5f, 0.4f};
+            gl.glMaterialfv(GL.GL_FRONT, GL_AMBIENT, rgba, 0);
+            gl.glMaterialfv(GL.GL_FRONT, GL_SPECULAR, rgba, 0);
+            gl.glMaterialf(GL.GL_FRONT, GL_SHININESS, 0.5f);
+
         } else {
-            gl.glColor3f(color[0], color[1], color[2]); // grey
+            gl.glMaterialfv(GL.GL_FRONT, GL_AMBIENT, color, 0);
+            gl.glMaterialfv(GL.GL_FRONT, GL_SPECULAR, color, 0);
+            gl.glMaterialf(GL.GL_FRONT, GL_SHININESS, 0.5f);
         }
 
         gl.glVertex3f(-3.5f, 0.0f, 0.0f);
@@ -169,29 +175,24 @@ public class Section {
         gl.glVertex3f(3.5f, 0.0f, 0.0f);
 
         // Back-face
-        //gl.glColor3f(1.0f, 0.0f, 1.0f); // purple
         gl.glVertex3f(-3.5f, 0.0f, 10.0f);
         gl.glVertex3f(-3.5f, -0.3f, 10.0f);
         gl.glVertex3f(3.5f, -0.3f, 10.0f);
         gl.glVertex3f(3.5f, 0.0f, 10.0f);
 
         // Left-face
-        //gl.glColor3f(1.0f, 0.0f, 0.0f); // red
         gl.glVertex3f(3.5f, 0.0f, 0.0f);
         gl.glVertex3f(3.5f, -0.3f, 0.0f);
         gl.glVertex3f(3.5f, -0.3f, 10.0f);
         gl.glVertex3f(3.5f, 0.0f, 10.0f);
 
         // Right-face
-        //gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
         gl.glVertex3f(-3.5f, 0.0f, 0.0f);
         gl.glVertex3f(-3.5f, -0.3f, 0.0f);
         gl.glVertex3f(-3.5f, -0.3f, 10.0f);
         gl.glVertex3f(-3.5f, 0.0f, 10.0f);
 
         // Top-face
-        //gl.glColor3f(1.0f, 1.0f, 0.0f); // yellow
-        
         gl.glTexCoord2f(roadTexture.getTextureLeft(), roadTexture.getTextureTop());
         gl.glVertex3f(3.5f, 0.0f, 0.0f);
         gl.glTexCoord2f(roadTexture.getTextureRight(), roadTexture.getTextureTop());
@@ -202,7 +203,6 @@ public class Section {
         gl.glVertex3f(-3.5f, 0.0f, 0.0f);
 
         // Bottom-face
-        //gl.glColor3f(0.0f, 1.0f, 1.0f); // cyan
         gl.glVertex3f(3.5f, -0.3f, 0.0f);
         gl.glVertex3f(3.5f, -0.3f, 10.0f);
         gl.glVertex3f(-3.5f, -0.3f, 10.0f);
@@ -257,14 +257,14 @@ public class Section {
             gl.glVertex3f(-3.5f + deltaX, -0.3f, -deltaZ);
         }
         gl.glEnd();
-        
+
         if (roadTexture != null && roadTexture.isSuccess()) {
             roadTexture.getTexture().disable(gl);
         }
-        
-        
-        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe 
 
+        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe 
+        StaticListener.resetMaterial(gl);
+        
         if (rightSide != null) {
             rightSide.render(gl);
         }

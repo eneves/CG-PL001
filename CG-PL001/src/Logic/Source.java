@@ -8,9 +8,13 @@ package Logic;
 import OpenGL.AppTexture;
 import OpenGL.StaticListener;
 import java.util.Random;
+import javax.media.opengl.GL;
 import static javax.media.opengl.GL.GL_TRIANGLES;
 import javax.media.opengl.GL2;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 
 /**
  *
@@ -110,10 +114,15 @@ public class Source {
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Front-face
-        if (on) {
-            gl.glColor3f(color[0], color[1], color[2]); // grey
+        if (on) {         
+            gl.glMaterialfv(GL.GL_FRONT, GL_AMBIENT, color, 0);
+            gl.glMaterialfv(GL.GL_FRONT, GL_SPECULAR, color, 0);
+            gl.glMaterialf(GL.GL_FRONT, GL_SHININESS, 0.5f);
         } else {
-            gl.glColor3f(0.8f, 0.8f, 0.8f); // grey
+            float[] rgba = {0.8f, 0.8f, 0.8f};
+            gl.glMaterialfv(GL.GL_FRONT, GL_AMBIENT, rgba, 0);
+            gl.glMaterialfv(GL.GL_FRONT, GL_SPECULAR, rgba, 0);
+            gl.glMaterialf(GL.GL_FRONT, GL_SHININESS, 0.5f);
         }
 
         gl.glTexCoord2f(sideWall.getTextureRight(), sideWall.getTextureBottom());
@@ -169,7 +178,6 @@ public class Source {
         gl.glBegin(GL_QUADS); // of the color cube
 
         // Right-face
-        //gl.glColor3f(0.0f, 0.0f, 1.0f); // blue
         gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureBottom());
         gl.glVertex3f(-3.0f, 0.0f, 0.0f);
         gl.glTexCoord2f(backWall.getTextureLeft(), backWall.getTextureTop());
@@ -192,7 +200,6 @@ public class Source {
         
         gl.glBegin(GL_QUADS); // of the color cube
         // Top-face
-        //gl.glColor3f(1.0f, 1.0f, 0.0f); // yellow
         //front-roof
         gl.glTexCoord2f(backWall.getTextureRight(), backWall.getTextureBottom());
         gl.glVertex3f(0.0f, 6.0f, 0.0f);
@@ -235,8 +242,7 @@ public class Source {
             roof.getTexture().disable(gl);
         }
         gl.glBegin(GL_QUADS); // of the color cube
-        // Bottom-face
-        //gl.glColor3f(0.0f, 1.0f, 1.0f); // cyan        
+        // Bottom-face     
         gl.glVertex3f(0.0f, 0.0f, 0.0f);
         gl.glVertex3f(0.0f, 0.0f, 6.0f);
         gl.glVertex3f(-3.0f, 0.0f, 6.0f);
@@ -244,9 +250,8 @@ public class Source {
 
         gl.glEnd();
 
-        
-        
-        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe   
+        gl.glTranslatef(-originX, -originY, -originZ); // translate back to absolute axe          
+        StaticListener.resetMaterial(gl);
 
     }
 }

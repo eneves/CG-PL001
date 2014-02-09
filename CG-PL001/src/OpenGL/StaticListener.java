@@ -13,20 +13,26 @@ import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
 import static javax.media.opengl.GL.GL_LEQUAL;
 import static javax.media.opengl.GL.GL_LINEAR;
-import static javax.media.opengl.GL.GL_LINEAR_MIPMAP_LINEAR;
 import static javax.media.opengl.GL.GL_NICEST;
 import static javax.media.opengl.GL.GL_REPEAT;
-import static javax.media.opengl.GL.GL_TEXTURE_2D;
 import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
-import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
-import static javax.media.opengl.GL.GL_TEXTURE_WRAP_S;
 import javax.media.opengl.GL2;
+import static javax.media.opengl.GL2ES1.GL_LIGHT_MODEL_AMBIENT;
 import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_AMBIENT;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_COLOR_MATERIAL;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_DIFFUSE;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_EMISSION;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHT0;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_POSITION;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SHININESS;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
+import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR;
 import javax.media.opengl.glu.GLU;
 
 /**
@@ -89,23 +95,17 @@ public class StaticListener
         gl.glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // best perspective correction
         gl.glShadeModel(GL_SMOOTH); // blends colors nicely, and smoothes out lighting   
         gl.glEnable(GL_DEPTH_TEST); // enables depth testing
-        //gl.glEnable(GL_LIGHTING);
-        //gl.glEnable(GL_LIGHT0);
-        //float[] floatArray = {50,50,50};
-        //gl.glLightModelfv(GL_LIGHT_MODEL_AMBIENT, floatArray,0);
-        //gl.glLightf(GL_LIGHT0, GL_DIFFUSE, 100);
-        //gl.glEnable(GL_CULL_FACE);
-        //gl.glCullFace(GL_BACK);
-        //gl.glEnable(GL_COLOR_MATERIAL);
-        //gl.glColorMaterial(GL.GL_FRONT, GL_DIFFUSE);
-
+        gl.glEnable(GL_LIGHTING);
+        float[] floatArray = {1.0f, 1.0f, 1.0f, 1};
+        gl.glLightModelfv(GL_LIGHT_MODEL_AMBIENT, floatArray, 0);
+        gl.glEnable(GL_COLOR_MATERIAL);
+        gl.glColorMaterial(GL.GL_FRONT, GL_DIFFUSE);
+        gl.glEnable(GL_LIGHT0);
         // Load all textures
         loadTextures(gl);
 
         textDisplay = new TextDisplayer();
 
-        //float[] floatArray = {0,50,50};
-        //gl.glLightfv(GL_LIGHT0, GL_POSITION,floatArray ,0);
         System.out.println("GLEventListener.init(GLAutoDrawable)");
     }
 
@@ -118,13 +118,18 @@ public class StaticListener
     public void display(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
         gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
-        
-        //int currentInstant = simulator.getCurrentInstant();
-        float hourDayFactor = (float)Math.abs( Math.cos(Math.toRadians((double) simulator.getCurrentInstant())));
 
-        float red = 0.53f * hourDayFactor;
-        float green = 0.81f * hourDayFactor;
-        float blue = 0.93f * hourDayFactor;
+        //int currentInstant = simulator.getCurrentInstant();
+        float hourDayFactorCos = (float) Math.abs(Math.cos(Math.toRadians((double) simulator.getCurrentInstant())));
+
+        float hourDayFactorSin = (float) Math.abs(Math.sin(Math.toRadians((double) simulator.getCurrentInstant())));
+
+        float red = 0.53f * (hourDayFactorCos + 0.1f);
+        float green = 0.81f * (hourDayFactorCos + 0.1f);
+        float blue = 0.93f * (hourDayFactorCos + 0.1f);
+
+        float[] lightPosition = {0.0f, 1.0f * hourDayFactorCos, 1.0f * hourDayFactorSin, 0.0f};
+        gl.glLightfv(GL_LIGHT0, GL_POSITION, lightPosition, 0);
 
         gl.glClearColor(red, green, blue, 1.0f);
         gl.glLoadIdentity();
@@ -135,8 +140,10 @@ public class StaticListener
                 this.up[0], this.up[1], this.up[2]
         );
 
-        gl.glColor3f(1, 1, 1);
-
+        float[] rgba = {1.0f, 1.0f, 1.0f};
+        gl.glMaterialfv(GL.GL_FRONT, GL_AMBIENT, rgba, 0);
+        gl.glMaterialfv(GL.GL_FRONT, GL_SPECULAR, rgba, 0);
+        gl.glMaterialf(GL.GL_FRONT, GL_SHININESS, 0.5f);
         // create grass plane
         AppTexture grass = StaticListener.textureDic.get("grass");
         if (grass != null && grass.isSuccess()) {
@@ -161,7 +168,7 @@ public class StaticListener
         if (grass != null && grass.isSuccess()) {
             grass.getTexture().disable(gl);
         }
-
+        resetMaterial(gl);
         simulator.render(gl);
         updateText();
         textDisplay.render(drawable.getWidth(), drawable.getHeight());
@@ -217,14 +224,9 @@ public class StaticListener
             up = new float[]{1, 0, 0};
             eye = new float[]{0, 200, 0};
             center = new float[]{0, 150, 0};
-            //System.out.println("Center ->(" + vp.getxCenter() + "," + vp.getzCenter() + ")");
-            //System.out.println("Min ->(" + vp.getxMin() + "," + vp.getzMin() + ")");
-            //System.out.println("Max ->(" + vp.getxMax() + "," + vp.getzMax() + ")");
             gl.glOrtho(
                     vp.getzMin(), vp.getzMax(),
                     vp.getxMin(), vp.getxMax(),
-                    /*vp.getMin(), vp.getMax(),
-                     vp.getMin(), vp.getMax(),*/
                     1, 1000
             );
         } else {
@@ -232,8 +234,6 @@ public class StaticListener
             eye = new float[]{0, 12, -14};
             center = new float[]{0, 11.5f, -12};
             GLU glu = GLU.createGLU(gl);
-            //GLContext gLContext = drawable.getContext();
-            //gLContext.makeCurrent();
             glu.gluPerspective(60, width / height, near, far);
         }
         gl.glMatrixMode(GL2.GL_MODELVIEW);
@@ -267,12 +267,6 @@ public class StaticListener
     }
 
     private void loadTextures(GL2 gl) {
-        if (!textureDic.containsKey("test")) {
-            textureDic.put("test", new AppTexture("resources/test.jpg", gl));
-        }
-        if (!textureDic.containsKey("car_top")) {
-            textureDic.put("car_top", new AppTexture("resources/car_top.jpg", gl));
-        }
         if (!textureDic.containsKey("house_back")) {
             textureDic.put("house_back", new AppTexture("resources/house_back_wall.jpg", gl));
         }
@@ -289,7 +283,6 @@ public class StaticListener
             AppTexture newTexture = new AppTexture("resources/grass.jpg", gl);
             newTexture.getTexture().setTexParameterf(gl, GL.GL_TEXTURE_WRAP_T, GL_REPEAT);
             newTexture.getTexture().setTexParameterf(gl, GL.GL_TEXTURE_WRAP_S, GL_REPEAT);
-            //newTexture.getTexture().setTexParameterf(gl, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             newTexture.getTexture().setTexParameterf(gl, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             textureDic.put("grass", newTexture);
         }
@@ -298,6 +291,28 @@ public class StaticListener
             textureDic.put("road", newTexture);
         }
 
+    }
+
+    public static void resetMaterial(GL2 gl) {
+        //GL_AMBIENT 	 	
+        //The default ambient reflectance for both front- and back-facing materials is (0.2, 0.2, 0.2, 1.0).	
+        float[] ambient = {0.2f, 0.2f, 0.2f, 1.0f};
+        gl.glMaterialfv(GL.GL_FRONT, GL_AMBIENT, ambient, 0);
+        //GL_DIFFUSE 	 	
+        //The default diffuse reflectance for both front- and back-facing materials is (0.8, 0.8, 0.8, 1.0).	
+        float[] diffuse = {0.8f, 0.8f, 0.8f, 1.0f};
+        gl.glMaterialfv(GL.GL_FRONT, GL_DIFFUSE, diffuse, 0);
+        //GL_SPECULAR 	 	
+        //The default specular reflectance for both front- and back-facing materials is (0.0, 0.0, 0.0, 1.0).	
+        float[] specular = {0.0f, 0.0f, 0.0f, 1.0f};
+        gl.glMaterialfv(GL.GL_FRONT, GL_SPECULAR, specular, 0);
+        //GL_EMISSION 	 	
+        //The default emission intensity for both front- and back-facing materials is (0.0, 0.0, 0.0, 1.0).	
+        float[] emission = {0.0f, 0.0f, 0.0f, 1.0f};
+        gl.glMaterialfv(GL.GL_FRONT, GL_EMISSION, emission, 0);
+        //GL_SHININESS 	 	
+        //The default specular exponent for both front- and back-facing materials is 0.
+        gl.glMaterialf(GL.GL_FRONT, GL_SHININESS, 0.0f);
     }
 
 }

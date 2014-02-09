@@ -296,7 +296,7 @@ public class AppListener
                 try {
                     simulator.incrementInstant();
                     canvas.display();
-                    TimeUnit.MILLISECONDS.sleep(150);
+                    TimeUnit.MILLISECONDS.sleep(350);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Simulator.class.getName()).log(Level.SEVERE, null, ex);
                 }

@@ -49,12 +49,6 @@ public class AppTexture {
             TextureData data = TextureIO.newTextureData(gl.getGLProfile(), fis, false, this.textureFileType);
             texture = TextureIO.newTexture(data);
 
-         // Create a OpenGL Texture object from (URL, mipmap, file suffix)
-            // Use URL so that can read from JAR and disk file.
-            /*texture = TextureIO.newTexture(
-             getClass().getClassLoader().getResource(textureFileName), // relative to project root 
-             false, textureFileType);
-             */
             // Use linear filter for texture if image is larger than the original texture
             gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             // Use linear filter for texture if image is smaller than the original texture
